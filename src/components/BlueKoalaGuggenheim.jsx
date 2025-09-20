@@ -1,6 +1,8 @@
+"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import ObjectSelector from '@/components/ObjectSelector';
 
 const BlueKoalaGuggenheim = () => {
