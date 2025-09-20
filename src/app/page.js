@@ -114,8 +114,8 @@ export default function Home() {
   const selectedObject = objects.find(obj => obj.id === selectedId);
 
   return (
-    <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
-      <div style={{ position: "absolute", top: 20, left: 20, zIndex: 1, display: "grid", gap: 12 }}>
+    <div className="h-screen w-screen max-h-screen relative">
+      <div className="absolute top-4 left-4 z-10 grid gap-4 max-h-screen overflow-y-auto">
         <ObjectSelector onObjectSelect={handleAddObject} />
         <ObjectSelectionPanel 
           objects={objects}
@@ -168,7 +168,7 @@ export default function Home() {
         
         <Grid />
         <CubeInstances />
-        <OrbitControls />
+        <OrbitControls enabled={!selectedId} />
         </Canvas>
     </div>
   );

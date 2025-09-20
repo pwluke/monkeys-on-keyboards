@@ -1,47 +1,35 @@
-"use client";
-import { useState } from "react";
 
 export const VIEW_PRESETS = {
-  "Perspective": {
-    position: [5, 5, 5],
-    target: [0, 0, 0],
-    type: "perspective"
-  },
   "Top": {
     position: [0, 10, 0],
     target: [0, 0, 0],
-    type: "orthographic"
+    type: "perspective"
   },
   "Bottom": {
     position: [0, -10, 0],
     target: [0, 0, 0],
-    type: "orthographic"
+    type: "perspective"
   },
   "Front": {
     position: [0, 0, 10],
     target: [0, 0, 0],
-    type: "orthographic"
+    type: "perspective"
   },
   "Back": {
     position: [0, 0, -10],
     target: [0, 0, 0],
-    type: "orthographic"
+    type: "perspective"
   },
   "Left": {
     position: [-10, 0, 0],
     target: [0, 0, 0],
-    type: "orthographic"
+    type: "perspective"
   },
   "Right": {
     position: [10, 0, 0],
     target: [0, 0, 0],
-    type: "orthographic"
-  },
-  "Isometric": {
-    position: [8, 8, 8],
-    target: [0, 0, 0],
     type: "perspective"
-  }
+  },
 };
 
 export default function ViewportControls({ activeView, onViewChange, isAnimating }) {

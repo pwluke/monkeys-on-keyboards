@@ -22,7 +22,7 @@ export default function TransformControlsPanel({
     selectedId ? objectRefs.current[selectedId] : null, [selectedId]
   );
 
-  // Keyboard shortcuts for transform modes
+  // Keyboard shortcuts for transform modes and deselection
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key.toLowerCase() === 'g') {
@@ -31,12 +31,14 @@ export default function TransformControlsPanel({
         onModeChange("rotate");
       } else if (event.key.toLowerCase() === 's') {
         onModeChange("scale");
+      } else if (event.key === 'Escape') {
+        onSelect(null); // Deselect all objects when ESC is pressed
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onModeChange]);
+  }, [onModeChange, onSelect]);
 
   return (
     <>
