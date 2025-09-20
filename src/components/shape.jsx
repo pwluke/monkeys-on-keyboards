@@ -1,6 +1,7 @@
 import { useRef } from "react";
+import * as THREE from "three";
 
-export default function Shape({ type, position, color, effect }) {
+export default function Shape({ type, position, color, effect, isSelected, onClick }) {
     // Compute effect-driven material settings
     let materialProps = {};
     switch (effect) {
@@ -50,7 +51,7 @@ export default function Shape({ type, position, color, effect }) {
       default:
         materialProps = { metalness: 0, roughness: 0.5 };
     }
-  
+
     const meshRef = useRef();
   
     // Default color per shape if none provided
@@ -58,28 +59,44 @@ export default function Shape({ type, position, color, effect }) {
     const finalColor = color || defaultColorByType[type] || "white";
   
     switch (type) {
-      case "box":
-        return (
-          <mesh ref={meshRef} position={position}>
-            <boxGeometry />
-            <meshStandardMaterial color={finalColor} {...materialProps} />
-          </mesh>
-        );
-      case "cone":
-        return (
-          <mesh ref={meshRef} position={position}>
-            <coneGeometry />
-            <meshStandardMaterial color={finalColor} {...materialProps} />
-          </mesh>
-        );
-      case "sphere":
-        return (
-          <mesh ref={meshRef} position={position}>
-            <sphereGeometry />
-            <meshStandardMaterial color={finalColor} {...materialProps} />
-          </mesh>
-        );
+      case "box": {
+        const geometry = <boxGeometry />;
+        return <SelectableMesh geometry={geometry} position={position} finalColor={finalColor} materialProps={materialProps} isSelected={isSelected} onClick={onClick} />;
+      }
+      case "cone": {
+        const geometry = <coneGeometry />;
+        return <SelectableMesh geometry={geometry} position={position} finalColor={finalColor} materialProps={materialProps} isSelected={isSelected} onClick={onClick} />;
+      }
+      case "sphere": {
+        const geometry = <sphereGeometry />;
+        return <SelectableMesh geometry={geometry} position={position} finalColor={finalColor} materialProps={materialProps} isSelected={isSelected} onClick={onClick} />;
+      }
       default:
         return null;
     }
-  }
+}
+
+function SelectableMesh({ geometry, position, finalColor, materialProps, isSelected, onClick }) {
+  const meshRef = useRef();
+
+  return (
+    <group position={position}>
+      {isSelected && (
+        <mesh scale={1.1}>
+          {geometry}
+          <meshBasicMaterial color="#FFFF00" side={THREE.BackSide} />
+        </mesh>
+      )}
+      <mesh
+        ref={meshRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+      >
+        {geometry}
+        <meshStandardMaterial color={finalColor} {...materialProps} />
+      </mesh>
+    </group>
+  );
+}

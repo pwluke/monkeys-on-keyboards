@@ -16,6 +16,7 @@ export default function Home() {
   const [objects, setObjects] = useState([
     { type: "box", id: Date.now(), position: [0, 0.5, 0], color: "#ff0000", effect: "matte" },
   ]);
+  const [selectedObjectId, setSelectedObjectId] = useState(null);
 
   const handleAddObject = (type) => {
     const position = [(Math.random() - 0.5) * 4, 0.5, (Math.random() - 0.5) * 4];
@@ -39,6 +40,14 @@ export default function Home() {
     setObjects((prev) => prev.map((obj) => (obj.id === id ? { ...obj, effect: newEffect } : obj)));
   };
 
+  const handleObjectClick = (id) => {
+    setSelectedObjectId(id);
+  };
+
+  const handleDeselect = () => {
+    setSelectedObjectId(null);
+  };
+
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
       <div style={{ position: "absolute", top: 20, left: 20, zIndex: 1, display: "grid", gap: 12 }}>
@@ -49,7 +58,7 @@ export default function Home() {
         <MatrixInput />
       </div>
 
-      <Canvas>
+      <Canvas onClick={handleDeselect}>
         <Environment preset="studio" />
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} />
@@ -61,6 +70,8 @@ export default function Home() {
             position={obj.position}
             color={obj.color}
             effect={obj.effect}
+            isSelected={obj.id === selectedObjectId}
+            onClick={() => handleObjectClick(obj.id)}
           />
         ))}
         <Grid />
@@ -70,4 +81,3 @@ export default function Home() {
     </div>
   );
 }
-
