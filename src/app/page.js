@@ -8,6 +8,8 @@ import ColorPickerPanel from "@/components/ui/ColorPickerPanel";
 import TransformControls from "@/components/TransformControls";
 import TransformUI from "@/components/TransformUI";
 import ObjectSelectionPanel from "@/components/ObjectSelectionPanel";
+import ViewportControls from "@/components/ViewportControls";
+import ViewportAnimator from "@/components/ViewportAnimator";
 
 import ArtPiece from "@/components/ArtPiece";
 import Shape from "@/components/shape";
@@ -21,6 +23,9 @@ export default function Home() {
   ]);
   const [selectedId, setSelectedId] = useState(null);
   const [transformMode, setTransformMode] = useState("translate");
+  const [activeView, setActiveView] = useState("Perspective");
+  const [viewPreset, setViewPreset] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleAddObject = (type) => {
     const position = [(Math.random() - 0.5) * 4, 0.5, (Math.random() - 0.5) * 4];
@@ -96,6 +101,16 @@ export default function Home() {
     setSelectedId(null);
   };
 
+  const handleViewChange = (viewName, preset) => {
+    setActiveView(viewName);
+    setViewPreset(preset);
+    setIsAnimating(true);
+  };
+
+  const handleAnimationComplete = () => {
+    setIsAnimating(false);
+  };
+
   const selectedObject = objects.find(obj => obj.id === selectedId);
 
   return (
@@ -120,6 +135,11 @@ export default function Home() {
           onDelete={handleDeleteObject}
           onDuplicate={handleDuplicateObject}
         />
+        <ViewportControls 
+          activeView={activeView}
+          onViewChange={handleViewChange} 
+          isAnimating={isAnimating}
+        />
       </div>
 
       <Canvas onClick={handleCanvasClick}>
@@ -127,6 +147,14 @@ export default function Home() {
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} />
         <ArtPiece />
+        
+        {/* Viewport Animator */}
+        <ViewportAnimator 
+          activeView={activeView}
+          viewPreset={viewPreset}
+          isAnimating={isAnimating}
+          onAnimationComplete={handleAnimationComplete}
+        />
         
         {/* Transform Controls System */}
         <TransformControls
