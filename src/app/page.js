@@ -14,6 +14,7 @@ import GeolocationPanel from "@/components/GeolocationPanel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
+import SceneControls from "@/components/SceneControls";
 
 import ArtPiece from "@/components/ArtPiece";
 import CubeInstances from "@/components/matrix";
@@ -178,6 +179,13 @@ export default function Home() {
     setObjects((prev) => prev.map((obj) => (obj.id === id ? { ...obj, effect: newEffect } : obj)));
   };
 
+  const handleSceneLoad = (loadedObjects) => {
+    // Deep clone the loaded objects to ensure new references are created,
+    // forcing React to re-render the components with the new state.
+    setObjects(structuredClone(loadedObjects));
+    setSelectedId(null);
+  };
+
   const handleLocationChange = (id, locationData) => {
     setObjects((prev) => prev.map((obj) => 
       obj.id === id ? { ...obj, ...locationData } : obj
@@ -300,6 +308,10 @@ export default function Home() {
 
         <ViewSelector />
         <ThemeToggle theme={theme} />
+        <SceneControls
+          objects={objects}
+          onSceneLoad={handleSceneLoad}
+        />
         <Collapsible open={panelStates.objectSelector} onOpenChange={() => togglePanel('objectSelector')}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
             <span className="text-sm font-medium">Object Selector</span>
@@ -459,4 +471,3 @@ export default function Home() {
         </div>
   );
 }
-
