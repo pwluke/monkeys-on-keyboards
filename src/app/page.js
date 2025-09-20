@@ -38,6 +38,7 @@ import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, sho
 
 export default function Home() {
   const canvasCaptureRef = useRef();
+  const orbitControlsRef = useRef();
   const [objects, setObjects] = useState([
     // { 
     //   type: "box", 
@@ -103,6 +104,44 @@ export default function Home() {
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => setMounted(true), []);
+
+  // Console log camera position and target for fine-tuning
+  // useEffect(() => {
+  //   const logCameraSettings = () => {
+  //     if (orbitControlsRef.current) {
+  //       const controls = orbitControlsRef.current;
+  //       const camera = controls.object;
+  //       console.log('=== CAMERA & CONTROLS SETTINGS ===');
+  //       console.log('Camera Position:', [
+  //         Math.round(camera.position.x * 100) / 100,
+  //         Math.round(camera.position.y * 100) / 100,
+  //         Math.round(camera.position.z * 100) / 100
+  //       ]);
+  //       console.log('OrbitControls Target:', [
+  //         Math.round(controls.target.x * 100) / 100,
+  //         Math.round(controls.target.y * 100) / 100,
+  //         Math.round(controls.target.z * 100) / 100
+  //       ]);
+  //       console.log('Camera FOV:', camera.fov);
+  //       console.log('==================================');
+  //     }
+  //   };
+
+  //   const intervalId = setInterval(logCameraSettings, 2000); // Log every 2 seconds
+    
+  //   // Also log when controls change
+  //   if (orbitControlsRef.current) {
+  //     const controls = orbitControlsRef.current;
+  //     controls.addEventListener('change', logCameraSettings);
+      
+  //     return () => {
+  //       clearInterval(intervalId);
+  //       controls.removeEventListener('change', logCameraSettings);
+  //     };
+  //   }
+
+  //   return () => clearInterval(intervalId);
+  // }, [mounted]);
 
   const handleAddObject = (type) => {
     const position = [(Math.random() - 0.5) * 4, 0.5, (Math.random() - 0.5) * 4];
@@ -463,7 +502,7 @@ export default function Home() {
 
       <Canvas 
         shadows={isArctic} 
-        camera={{ position: [-5, 5, 5], fov: 50 }}  
+        camera={{ position: [6.33, 1.85, 13.65], fov: 65 }}  
         onClick={handleCanvasClick}
         gl={{ preserveDrawingBuffer: true }}>
         <CanvasCapture ref={canvasCaptureRef} />
@@ -500,7 +539,7 @@ export default function Home() {
         )}
         
         <Grid />
-        <OrbitControls enabled={!selectedId} />
+        <OrbitControls ref={orbitControlsRef} enabled={!selectedId} target={[-2.68, 6.41, -0.38]} />
 
         <axesHelper args={[5]} />
         </Canvas>
