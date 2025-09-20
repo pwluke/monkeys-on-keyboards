@@ -10,6 +10,7 @@ import ArtPiece from "@/components/ArtPiece";
 import Shape from "@/components/shape";
 import CubeInstances from "@/components/matrix";
 import MatrixInput from "@/components/MatrixInput";
+import MaterialPicker from "@/components/mv";
 
 export default function Home() {
   const [objects, setObjects] = useState([
@@ -44,6 +45,7 @@ export default function Home() {
         <ObjectSelector onObjectSelect={handleAddObject} />
         <ColorPickerPanel objects={objects} onColorChange={handleColorChange} />
         <EffectSelector objects={objects} onEffectChange={handleEffectChange} />
+        <MaterialPicker />
         <MatrixInput />
       </div>
 
