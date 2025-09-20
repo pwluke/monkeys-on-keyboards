@@ -17,6 +17,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import SceneControls from "@/components/SceneControls";
+import Snake from "@/components/snake";
 
 import ArtPiece from "@/components/ArtPiece";
 import CubeInstances from "@/components/matrix";
@@ -260,17 +261,22 @@ export default function Home() {
   };
 
   const handleToggleElement = (element) => {
+    console.log(`Toggling ${element}`);
     switch (element) {
       case "cubeInstances":
+        console.log(`CubeInstances before: ${showCubeInstances}, after: ${!showCubeInstances}`);
         setShowCubeInstances(!showCubeInstances);
         break;
       case "artPiece":
+        console.log(`ArtPiece before: ${showArtPiece}, after: ${!showArtPiece}`);
         setShowArtPiece(!showArtPiece);
         break;
       case "guggenheimStructure":
+        console.log(`Guggenheim before: ${showGuggenheim}, after: ${!showGuggenheim}`);
         setShowGuggenheim(!showGuggenheim);
         break;
       case "transformControls":
+        console.log(`TransformControls before: ${showTransformControls}, after: ${!showTransformControls}`);
         setShowTransformControls(!showTransformControls);
         break;
       case "viewportControls":
@@ -470,6 +476,7 @@ export default function Home() {
         <Environment preset="studio" />
         <ambientLight intensity={isArctic ? 4 : 2.5} />
         <directionalLight position={[1, 1, 1]} />
+        <Snake />
         
         {/* Conditionally rendered scene elements */}
         {showArtPiece && <ArtPiece />}
