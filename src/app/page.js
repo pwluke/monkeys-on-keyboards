@@ -35,18 +35,18 @@ import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, sho
 
 export default function Home() {
   const [objects, setObjects] = useState([
-    { 
-      type: "box", 
-      id: Date.now(), 
-      position: [0, 0.5, 0], 
-      color: "#ff0000", 
-      effect: "matte", 
-      rotation: [0, 0, 0], 
-      scale: [1, 1, 1],
-      latitude: 40.7128,
-      longitude: -74.0060,
-      altitude: 0
-    },
+    // { 
+    //   type: "box", 
+    //   id: Date.now(), 
+    //   position: [0, 0.5, 0], 
+    //   color: "#ff0000", 
+    //   effect: "matte", 
+    //   rotation: [0, 0, 0], 
+    //   scale: [1, 1, 1],
+    //   latitude: 40.7128,
+    //   longitude: -74.0060,
+    //   altitude: 0
+    // },
   ]);
   const [isRotating, setIsRotating] = useState(true);
   const [shape, setShape] = useState('sphere');

@@ -196,10 +196,10 @@ export default function BasicTerrainMesh({
         </mesh>
       )}
       {/* Simple indicator */}
-      <mesh position={[0, 1, 0]}>
+      {/* <mesh position={[0, 1, 0]}>
         <boxGeometry args={[2, 2, 2]} />
         <meshBasicMaterial color="red" />
-      </mesh>
+      </mesh> */}
     </group>
   );
 }

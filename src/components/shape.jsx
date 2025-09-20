@@ -1,110 +1,116 @@
 import { useRef } from "react";
 import { useAtom } from "jotai";
+import { Edges, Html } from "@react-three/drei";
 import { pickedColorAtom, currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom } from "@/lib/atoms";
 
-export default function Shape({ type, position, color, effect }) {
-    const [globalPickedColor] = useAtom(pickedColorAtom);
-    const [currentView] = useAtom(currentViewAtom);
-    const [isArctic] = useAtom(isArcticAtom);
-    const [isTransparent] = useAtom(isTransparentAtom);
-    const [isLineweight] = useAtom(isLineweightAtom);
+export default function Shape({ type, position, view, theme, material }) {
+  const isLineweight = view === "lineweight";
+  const isArctic = view === "arctic";
 
-    // Start with effect-driven material settings
-    let materialProps = {};
-    switch (effect) {
-      case "metallic":
-        materialProps = { metalness: 1, roughness: 0.2 };
-        break;
-      case "matte":
-        materialProps = { metalness: 0, roughness: 1 };
-        break;
-      case "reflective":
-        materialProps = { metalness: 1, roughness: 0, envMapIntensity: 2 };
-        break;
-      case "glossy":
-        materialProps = { metalness: 0.8, roughness: 0.1 };
-        break;
-      case "glass":
-        materialProps = { metalness: 0.25, roughness: 0, opacity: 0.3, transparent: true };
-        break;
-      case "textured":
-        // Placeholder for a real texture: add map/normalMap here when available
-        materialProps = { metalness: 0.2, roughness: 0.7 };
-        break;
-      case "emissive":
-        materialProps = { metalness: 0.1, roughness: 0.5, emissive: "yellow", emissiveIntensity: 1 };
-        break;
-      case "toon":
-        // Would swap to MeshToonMaterial for a true toon effect
-        materialProps = { metalness: 0, roughness: 0.8 };
-        break;
-      case "wireframe":
-        materialProps = { metalness: 0, roughness: 0.5, wireframe: true };
-        break;
-      case "bumpy":
-        // Would attach a normalMap for real bumpiness
-        materialProps = { metalness: 0.3, roughness: 0.7 };
-        break;
-      case "fresnel":
-        // True fresnel would need a custom shader
-        materialProps = { metalness: 0.2, roughness: 0.5 };
-        break;
-      case "holographic":
-        materialProps = { metalness: 1, roughness: 0, envMapIntensity: 2, opacity: 0.7, transparent: true, color: "#00ffff" };
-        break;
-      case "concrete":
-        materialProps = { metalness: 0, roughness: 1, color: "#888" };
-        break;
-      default:
-        materialProps = { metalness: 0, roughness: 0.5 };
-    }
+  const geometries = {
+    box: <boxGeometry />,
+    cone: <coneGeometry />,
+    sphere: <sphereGeometry />,
+    cylinder: <cylinderGeometry />,
+    torus: <torusGeometry />,
+  };
 
-    // Apply view overrides - these take precedence over effect settings
-    if (isArctic) {
-        materialProps.color = "white";
-    }
-    
-    if (isTransparent || isLineweight) {
-        materialProps.transparent = true;
-        materialProps.opacity = isTransparent ? 0.7 : 0.1;
-    }
-    
-    // Special case: lineweight view should show wireframe regardless of effect
-    if (isLineweight) {
-        materialProps.wireframe = true;
-    }
-  
-    const meshRef = useRef();
-  
-    // Default color per shape if none provided
-    const defaultColorByType = { box: "red", cone: "blue", sphere: "green" };
-    // Use global picked color if available, otherwise use the provided color, then default
-    // But arctic view overrides all color choices
-    const finalColor = isArctic ? "white" : (globalPickedColor || color || defaultColorByType[type] || "white");
-  
-    switch (type) {
-      case "box":
-        return (
-          <mesh ref={meshRef} position={position}>
-            <boxGeometry />
-            <meshStandardMaterial color={finalColor} {...materialProps} />
-          </mesh>
-        );
-      case "cone":
-        return (
-          <mesh ref={meshRef} position={position}>
-            <coneGeometry />
-            <meshStandardMaterial color={finalColor} {...materialProps} />
-          </mesh>
-        );
-      case "sphere":
-        return (
-          <mesh ref={meshRef} position={position}>
-            <sphereGeometry />
-            <meshStandardMaterial color={finalColor} {...materialProps} />
-          </mesh>
-        );
-      default:
-        return null;
-    }
+  const colors = {
+    box: "red",
+    cone: "blue",
+    sphere: "green",
+    cylinder: "yellow",
+    torus: "purple",
+  };
+
+  if (!geometries[type]) {
+    return null;
   }
+
+  let materialName = "Plastic";
+  let embodiedCarbon = 5.0;
+  let baseColor = colors[type] || "red";
+
+  // Start with safe default material properties
+  let materialProps = {
+    color: baseColor,
+    transparent: view === "transparent" || isLineweight,
+    opacity: view === "transparent" ? 0.7 : isLineweight ? 0.1 : 1,
+    roughness: 0.5,
+    metalness: 0
+  };
+
+  // Apply material-specific properties
+  switch (material) {
+    case "wood":
+      materialProps.color = "#8B4513";
+      materialProps.roughness = 0.8;
+      materialProps.metalness = 0;
+      materialName = "Wood";
+      embodiedCarbon = 0.5;
+      break;
+    case "metal":
+      materialProps.color = "#C0C0C0";
+      materialProps.roughness = 0.2;
+      materialProps.metalness = 1.0;
+      materialName = "Metal";
+      embodiedCarbon = 8.0;
+      break;
+    case "bamboo":
+      materialProps.color = "#A3A16B";
+      materialProps.roughness = 0.6;
+      materialProps.metalness = 0;
+      materialName = "Bamboo";
+      embodiedCarbon = 0.6;
+      break;
+    default:
+      // Use shape default color
+      materialProps.color = baseColor;
+      embodiedCarbon = 5.0; // Default for plastic
+      break;
+  }
+
+  // Arctic view overrides all colors
+  if (isArctic) {
+    materialProps.color = "white";
+  }
+
+  return (
+    <mesh position={position}>
+      {geometries[type]}
+      <meshStandardMaterial {...materialProps} />
+      {isLineweight && <Edges />}
+      <Html
+        position={[0, 1, 0]}
+        center
+        distanceFactor={10}
+      >
+        <div style={{
+          color: theme === "dark" ? "white" : "black",
+          fontSize: "12px",
+          fontWeight: "bold",
+          textAlign: "center",
+          pointerEvents: "none",
+          userSelect: "none"
+        }}>
+          {materialName}
+        </div>
+      </Html>
+      <Html
+        position={[0, 0.7, 0]}
+        center
+        distanceFactor={10}
+      >
+        <div style={{
+          color: theme === "dark" ? "white" : "black",
+          fontSize: "10px",
+          textAlign: "center",
+          pointerEvents: "none",
+          userSelect: "none"
+        }}>
+          {`Embodied Carbon: ${embodiedCarbon} kgCO₂e`}
+        </div>
+      </Html>
+    </mesh>
+  );
+}
