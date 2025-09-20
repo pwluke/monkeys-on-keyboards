@@ -12,9 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function ObjectSelector() {
+export function ObjectSelector({ onObjectSelect }) {
   return (
-    <Select>
+    <Select onValueChange={onObjectSelect}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select an object" />
       </SelectTrigger>
