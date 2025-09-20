@@ -1,11 +1,15 @@
 import { useRef } from "react";
 import { useAtom } from "jotai";
-import { pickedColorAtom } from "@/lib/atoms";
+import { pickedColorAtom, currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom } from "@/lib/atoms";
 
 export default function Shape({ type, position, color, effect }) {
     const [globalPickedColor] = useAtom(pickedColorAtom);
-    
-    // Compute effect-driven material settings
+    const [currentView] = useAtom(currentViewAtom);
+    const [isArctic] = useAtom(isArcticAtom);
+    const [isTransparent] = useAtom(isTransparentAtom);
+    const [isLineweight] = useAtom(isLineweightAtom);
+
+    // Start with effect-driven material settings
     let materialProps = {};
     switch (effect) {
       case "metallic":
@@ -54,13 +58,29 @@ export default function Shape({ type, position, color, effect }) {
       default:
         materialProps = { metalness: 0, roughness: 0.5 };
     }
+
+    // Apply view overrides - these take precedence over effect settings
+    if (isArctic) {
+        materialProps.color = "white";
+    }
+    
+    if (isTransparent || isLineweight) {
+        materialProps.transparent = true;
+        materialProps.opacity = isTransparent ? 0.7 : 0.1;
+    }
+    
+    // Special case: lineweight view should show wireframe regardless of effect
+    if (isLineweight) {
+        materialProps.wireframe = true;
+    }
   
     const meshRef = useRef();
   
     // Default color per shape if none provided
     const defaultColorByType = { box: "red", cone: "blue", sphere: "green" };
     // Use global picked color if available, otherwise use the provided color, then default
-    const finalColor = globalPickedColor || color || defaultColorByType[type] || "white";
+    // But arctic view overrides all color choices
+    const finalColor = isArctic ? "white" : (globalPickedColor || color || defaultColorByType[type] || "white");
   
     switch (type) {
       case "box":

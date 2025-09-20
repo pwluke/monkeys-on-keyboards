@@ -57,3 +57,9 @@ export const matricesAtom = atom(defaultMatrices);
 
 // Atom to store the picked color from MaterialPicker
 export const pickedColorAtom = atom(null);
+
+// Atoms for view state management
+export const currentViewAtom = atom("default");
+export const isArcticAtom = atom((get) => get(currentViewAtom) === "arctic");
+export const isTransparentAtom = atom((get) => get(currentViewAtom) === "transparent");
+export const isLineweightAtom = atom((get) => get(currentViewAtom) === "lineweight");
