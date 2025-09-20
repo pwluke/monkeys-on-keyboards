@@ -11,9 +11,11 @@ import ObjectSelectionPanel from "@/components/ObjectSelectionPanel";
 import ViewportControls from "@/components/ViewportControls";
 import ViewportAnimator from "@/components/ViewportAnimator";
 import GeolocationPanel from "@/components/GeolocationPanel";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 import ArtPiece from "@/components/ArtPiece";
-import Shape from "@/components/shape";
 import CubeInstances from "@/components/matrix";
 import MatrixInput from "@/components/MatrixInput";
 import MaterialPicker from "@/components/mv";
@@ -46,6 +48,27 @@ export default function Home() {
   const [activeView, setActiveView] = useState("Perspective");
   const [viewPreset, setViewPreset] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  // Toggle controls for scene elements
+  const [visibleElements, setVisibleElements] = useState({
+    cubeInstances: true,
+    artPiece: true,
+    guggenheimStructure: true,
+    transformControls: true
+  });
+
+  // Collapsible panel states
+  const [panelStates, setPanelStates] = useState({
+    objectSelector: false,
+    objectSelection: false,
+    colorPicker: false,
+    effectSelector: false,
+    materialPicker: false,
+    matrixInput: false,
+    transformUI: false,
+    viewportControls: false,
+    geolocation: false
+  });
 
   const handleAddObject = (type) => {
     const position = [(Math.random() - 0.5) * 4, 0.5, (Math.random() - 0.5) * 4];
@@ -144,47 +167,192 @@ export default function Home() {
     setIsAnimating(false);
   };
 
+  const handleToggleElement = (element) => {
+    setVisibleElements(prev => ({
+      ...prev,
+      [element]: !prev[element]
+    }));
+  };
+
+  const togglePanel = (panelName) => {
+    setPanelStates(prev => ({
+      ...prev,
+      [panelName]: !prev[panelName]
+    }));
+  };
+
   const selectedObject = objects.find(obj => obj.id === selectedId);
 
   return (
     <div className="h-screen w-screen max-h-screen relative">
-      <div className="absolute top-4 left-4 z-10 grid gap-4 max-h-screen overflow-y-auto">
-        <ObjectSelector onObjectSelect={handleAddObject} />
-        <ObjectSelectionPanel 
-          objects={objects}
-          selectedId={selectedId}
-          onSelect={handleSelectObject}
-          onDelete={handleDeleteObject}
-          onDuplicate={handleDuplicateObject}
-        />
-        <ColorPickerPanel objects={objects} onColorChange={handleColorChange} />
-        <EffectSelector objects={objects} onEffectChange={handleEffectChange} />
-        <MaterialPicker onApplyColorToAll={handleApplyColorToAll} />
-        <MatrixInput />
-        <TransformUI 
-          selectedObject={selectedObject}
-          transformMode={transformMode}
-          onModeChange={setTransformMode}
-          onDelete={handleDeleteObject}
-          onDuplicate={handleDuplicateObject}
-        />
-        <ViewportControls 
-          activeView={activeView}
-          onViewChange={handleViewChange} 
-          isAnimating={isAnimating}
-        />
-        <GeolocationPanel 
-          selectedObject={selectedObject}
-          onLocationChange={handleLocationChange}
-        />
+      {/* Toggle Group at the top */}
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+        <div className="text-sm font-medium mb-2">Scene Elements</div>
+        <ToggleGroup type="multiple" className="gap-2">
+          <ToggleGroupItem
+            value="cubeInstances"
+            pressed={visibleElements.cubeInstances}
+            onPressedChange={() => handleToggleElement('cubeInstances')}
+            className="px-3 py-2 text-xs"
+          >
+            Cube Instances
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="artPiece"
+            pressed={visibleElements.artPiece}
+            onPressedChange={() => handleToggleElement('artPiece')}
+            className="px-3 py-2 text-xs"
+          >
+            Art Piece
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="guggenheimStructure"
+            pressed={visibleElements.guggenheimStructure}
+            onPressedChange={() => handleToggleElement('guggenheimStructure')}
+            className="px-3 py-2 text-xs"
+          >
+            Guggenheim
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="transformControls"
+            pressed={visibleElements.transformControls}
+            onPressedChange={() => handleToggleElement('transformControls')}
+            className="px-3 py-2 text-xs"
+          >
+            Shapes/Transform
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="absolute top-4 left-4 z-10 grid gap-2 max-h-screen overflow-y-auto w-80">
+        {/* Object Selector Panel */}
+        <Collapsible open={panelStates.objectSelector} onOpenChange={() => togglePanel('objectSelector')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Object Selector</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.objectSelector ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <ObjectSelector onObjectSelect={handleAddObject} />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Object Selection Panel */}
+        <Collapsible open={panelStates.objectSelection} onOpenChange={() => togglePanel('objectSelection')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Object Selection</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.objectSelection ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <ObjectSelectionPanel 
+              objects={objects}
+              selectedId={selectedId}
+              onSelect={handleSelectObject}
+              onDelete={handleDeleteObject}
+              onDuplicate={handleDuplicateObject}
+            />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Color Picker Panel */}
+        <Collapsible open={panelStates.colorPicker} onOpenChange={() => togglePanel('colorPicker')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Color Picker</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.colorPicker ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <ColorPickerPanel objects={objects} onColorChange={handleColorChange} />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Effect Selector Panel */}
+        <Collapsible open={panelStates.effectSelector} onOpenChange={() => togglePanel('effectSelector')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Effect Selector</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.effectSelector ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <EffectSelector objects={objects} onEffectChange={handleEffectChange} />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Material Picker Panel */}
+        <Collapsible open={panelStates.materialPicker} onOpenChange={() => togglePanel('materialPicker')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Material Picker</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.materialPicker ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <MaterialPicker onApplyColorToAll={handleApplyColorToAll} />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Matrix Input Panel */}
+        <Collapsible open={panelStates.matrixInput} onOpenChange={() => togglePanel('matrixInput')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Matrix Input</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.matrixInput ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <MatrixInput />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Transform UI Panel */}
+        <Collapsible open={panelStates.transformUI} onOpenChange={() => togglePanel('transformUI')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Transform UI</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.transformUI ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <TransformUI 
+              selectedObject={selectedObject}
+              transformMode={transformMode}
+              onModeChange={setTransformMode}
+              onDelete={handleDeleteObject}
+              onDuplicate={handleDuplicateObject}
+            />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Viewport Controls Panel */}
+        <Collapsible open={panelStates.viewportControls} onOpenChange={() => togglePanel('viewportControls')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Viewport Controls</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.viewportControls ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <ViewportControls 
+              activeView={activeView}
+              onViewChange={handleViewChange} 
+              isAnimating={isAnimating}
+            />
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Geolocation Panel */}
+        <Collapsible open={panelStates.geolocation} onOpenChange={() => togglePanel('geolocation')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Geolocation</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.geolocation ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <GeolocationPanel 
+              selectedObject={selectedObject}
+              onLocationChange={handleLocationChange}
+            />
+          </CollapsibleContent>
+        </Collapsible>
       </div>
 
       <Canvas onClick={handleCanvasClick}>
         <Environment preset="studio" />
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} />
-        <ArtPiece />
-        <GuggenheimStructure isRotating={true} shape="koala" />
+        
+        {/* Conditionally rendered scene elements */}
+        {visibleElements.artPiece && <ArtPiece />}
+        {visibleElements.guggenheimStructure && <GuggenheimStructure isRotating={true} shape="koala" />}
+        {visibleElements.cubeInstances && <CubeInstances />}
         
         {/* Viewport Animator */}
         <ViewportAnimator 
@@ -194,18 +362,19 @@ export default function Home() {
           onAnimationComplete={handleAnimationComplete}
         />
         
-        {/* Transform Controls System */}
-      <TransformControls
-          objects={objects}
-          selectedId={selectedId}
-          onSelect={handleSelectObject}
-          onTransform={handleTransform}
-          transformMode={transformMode}
-          onModeChange={setTransformMode}
-        />
+        {/* Transform Controls System - conditionally rendered */}
+        {visibleElements.transformControls && (
+          <TransformControls
+            objects={objects}
+            selectedId={selectedId}
+            onSelect={handleSelectObject}
+            onTransform={handleTransform}
+            transformMode={transformMode}
+            onModeChange={setTransformMode}
+          />
+        )}
         
         <Grid />
-        <CubeInstances />
         <OrbitControls enabled={!selectedId} />
         </Canvas>
     </div>
