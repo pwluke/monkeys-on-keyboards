@@ -17,6 +17,7 @@ import Shape from "@/components/shape";
 import CubeInstances from "@/components/matrix";
 import MatrixInput from "@/components/MatrixInput";
 import MaterialPicker from "@/components/mv";
+import GuggenheimStructure from "@/components/BlueKoala";
 
 
 export default function Home() {
@@ -34,6 +35,12 @@ export default function Home() {
       altitude: 0
     },
   ]);
+  const [isRotating, setIsRotating] = useState(true);
+  const [shape, setShape] = useState('sphere');
+
+  const toggleRotation = () => {
+    setIsRotating(!isRotating);
+  };
   const [selectedId, setSelectedId] = useState(null);
   const [transformMode, setTransformMode] = useState("translate");
   const [activeView, setActiveView] = useState("Perspective");
@@ -177,6 +184,7 @@ export default function Home() {
         <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} />
         <ArtPiece />
+        <GuggenheimStructure isRotating={true} shape="koala" />
         
         {/* Viewport Animator */}
         <ViewportAnimator 
