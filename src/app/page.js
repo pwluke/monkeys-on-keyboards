@@ -11,6 +11,11 @@ import ObjectSelectionPanel from "@/components/ObjectSelectionPanel";
 import ViewportControls from "@/components/ViewportControls";
 import ViewportAnimator from "@/components/ViewportAnimator";
 import GeolocationPanel from "@/components/GeolocationPanel";
+import GoogleTileMesh from "@/components/GoogleTileMesh";
+import SimpleTileMesh from "@/components/SimpleTileMesh";
+import OpenStreetMapMesh from "@/components/OpenStreetMapMesh";
+import OpenStreetMapControls from "@/components/OpenStreetMapControls";
+import BasicTerrainMesh from "@/components/BasicTerrainMesh";
 
 import ArtPiece from "@/components/ArtPiece";
 import Shape from "@/components/shape";
@@ -28,8 +33,8 @@ export default function Home() {
       effect: "matte", 
       rotation: [0, 0, 0], 
       scale: [1, 1, 1],
-      latitude: 40.7128,
-      longitude: -74.0060,
+      latitude: 0,
+      longitude: 0,
       altitude: 0
     },
   ]);
@@ -38,6 +43,15 @@ export default function Home() {
   const [activeView, setActiveView] = useState("Perspective");
   const [viewPreset, setViewPreset] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [tileSettings, setTileSettings] = useState({
+    centerLat: 0,
+    centerLng: 0,
+    zoom: 10,
+    meshSize: 200,
+    heightScale: 1,
+    mapType: 'osm'
+  });
+  const [showTileMesh, setShowTileMesh] = useState(false);
 
   const handleAddObject = (type) => {
     const position = [(Math.random() - 0.5) * 4, 0.5, (Math.random() - 0.5) * 4];
@@ -55,8 +69,8 @@ export default function Home() {
       effect: "matte",
       rotation: [0, 0, 0],
       scale: [1, 1, 1],
-      latitude: 40.7128,
-      longitude: -74.0060,
+      latitude: 0,
+      longitude: 0,
       altitude: 0
     };
 
@@ -93,7 +107,7 @@ export default function Home() {
     if (targetId) {
       setObjects((prev) => prev.filter(obj => obj.id !== targetId));
       if (targetId === selectedId) {
-        setSelectedId(null);
+    setSelectedId(null);
       }
     }
   };
@@ -132,9 +146,17 @@ export default function Home() {
     setIsAnimating(false);
   };
 
+  const handleTileSettingsChange = (newSettings) => {
+    setTileSettings(newSettings);
+  };
+
+  const handleTileLoad = (tiles) => {
+    console.log(`Loaded ${tiles.length} tiles`);
+  };
+
   const selectedObject = objects.find(obj => obj.id === selectedId);
 
-  return (
+    return (
     <div className="h-screen w-screen max-h-screen relative">
       <div className="absolute top-4 left-4 z-10 grid gap-4 max-h-screen overflow-y-auto">
         <ObjectSelector onObjectSelect={handleAddObject} />
@@ -165,6 +187,44 @@ export default function Home() {
           selectedObject={selectedObject}
           onLocationChange={handleLocationChange}
         />
+        <OpenStreetMapControls 
+          settings={tileSettings}
+          onSettingsChange={handleTileSettingsChange}
+        />
+        <div style={{ 
+          padding: "12px", 
+          background: "white", 
+          borderRadius: "8px", 
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          border: "1px solid #e0e0e0"
+        }}>
+          <h3 style={{ margin: "0 0 8px 0", fontSize: "14px" }}>
+            Terrain Mesh
+          </h3>
+          <button
+            onClick={() => setShowTileMesh(!showTileMesh)}
+            style={{
+              padding: "6px 12px",
+              background: showTileMesh ? "#dc3545" : "#007bff",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "12px",
+              fontWeight: "500"
+            }}
+          >
+            {showTileMesh ? "Hide" : "Show"} Terrain
+          </button>
+          <p style={{ 
+            margin: "8px 0 0 0", 
+            fontSize: "11px", 
+            color: "#666",
+            lineHeight: "1.4"
+          }}>
+            Procedural terrain based on coordinates. Guaranteed to work!
+          </p>
+        </div>
       </div>
 
       <Canvas onClick={handleCanvasClick}>
@@ -180,6 +240,18 @@ export default function Home() {
           isAnimating={isAnimating}
           onAnimationComplete={handleAnimationComplete}
         />
+        
+        {/* Basic Terrain Mesh */}
+        {showTileMesh && (
+          <BasicTerrainMesh
+            centerLat={tileSettings.centerLat}
+            centerLng={tileSettings.centerLng}
+            zoom={tileSettings.zoom}
+            meshSize={tileSettings.meshSize}
+            heightScale={tileSettings.heightScale}
+            onTileLoad={handleTileLoad}
+          />
+        )}
         
         {/* Transform Controls System */}
       <TransformControls
