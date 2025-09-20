@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Grid, OrbitControls } from "@react-three/drei";
 import { ObjectSelector } from "@/components/ObjectSelector";
+import ArtPiece from "@/components/ArtPiece";
 
 function Shape({ type, position }) {
   switch (type) {
@@ -55,6 +56,7 @@ export default function Home() {
       <Canvas>
         <ambientLight intensity={2.5} />
         <directionalLight position={[1, 1, 1]} />
+        <ArtPiece />
         {objects.map((obj) => (
           <Shape key={obj.id} type={obj.type} position={obj.position} />
         ))}
