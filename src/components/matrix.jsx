@@ -1,25 +1,11 @@
 import React from "react";
 import * as THREE from "three";
-
-
-// Example Rhino export: list of 4x4 matrices
-const matrices = [
-  [
-    [1, 0, 0, 0],
-    [0, 1, 0, 10],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1]
-  ],
-  [
-    [1, 0, 0, 10],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1]
-  ]
-  // … more from Rhino
-];
+import { useAtomValue } from "jotai";
+import { matricesAtom } from "@/lib/atoms";
 
 export default function CubeInstances() {
+  const matrices = useAtomValue(matricesAtom);
+
   return (
     <>
       {matrices.map((m, i) => {
