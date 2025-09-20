@@ -1,12 +1,12 @@
 import React from "react";
-import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
+
 
 // Example Rhino export: list of 4x4 matrices
 const matrices = [
   [
     [1, 0, 0, 0],
-    [0, 1, 0, 0],
+    [0, 1, 0, 10],
     [0, 0, 1, 0],
     [0, 0, 0, 1]
   ],
@@ -19,7 +19,7 @@ const matrices = [
   // … more from Rhino
 ];
 
-function CubeInstances() {
+export default function CubeInstances() {
   return (
     <>
       {matrices.map((m, i) => {
@@ -39,15 +39,5 @@ function CubeInstances() {
         );
       })}
     </>
-  );
-}
-
-export default function App() {
-  return (
-    <Canvas camera={{ position: [20, 20, 20], fov: 50 }}>
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
-      <CubeInstances />
-    </Canvas>
   );
 }

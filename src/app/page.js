@@ -8,6 +8,7 @@ import ColorPickerPanel from "@/components/ui/ColorPickerPanel";
 
 import ArtPiece from "@/components/ArtPiece";
 import Shape from "@/components/shape";
+import CubeInstances from "@/components/matrix";
 
 export default function Home() {
   const [objects, setObjects] = useState([
@@ -59,6 +60,7 @@ export default function Home() {
           />
         ))}
         <Grid />
+        <CubeInstances />
         <OrbitControls />
       </Canvas>
     </div>
