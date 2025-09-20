@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 
-// Preload images
-import bg1 from "@/assets/bg1.jpg";
-import bg2 from "@/assets/bg2.jpg";
-
 const backgrounds = [
   { label: "Solid White", type: "color", value: "#ffffffff" },
   { label: "Dark GRey", type: "color", value: "#292929ff" },
-  { label: "Image 1", type: "image", value: bg1 },
-  { label: "Image 2", type: "image", value: bg2 },
+  { label: "Image 1", type: "image", value: "/bg1.jpg" },
+  { label: "Image 2", type: "image", value: "/bg2.jpg" },
 ];
 
 export default function BackgroundSwitcher({ children }) {
-  const [selected, setSelected] = useState(backgrounds[0]);
+  const [selected, setSelected] = useState(backgrounds[2]);
 
   const style =
     selected.type === "color"
