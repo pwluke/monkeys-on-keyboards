@@ -49,6 +49,7 @@ export default function Home() {
     zoom: 10,
     meshSize: 200,
     heightScale: 1,
+    treeScale: 1,
     mapType: 'osm'
   });
   const [showTileMesh, setShowTileMesh] = useState(false);
@@ -211,18 +212,63 @@ export default function Home() {
               borderRadius: "4px",
               cursor: "pointer",
               fontSize: "12px",
-              fontWeight: "500"
+              fontWeight: "500",
+              marginBottom: "12px"
             }}
           >
             {showTileMesh ? "Hide" : "Show"} Terrain
           </button>
+          
+          {showTileMesh && (
+            <div style={{ marginTop: "12px" }}>
+              <label style={{ 
+                display: "block", 
+                fontSize: "12px", 
+                fontWeight: "500", 
+                marginBottom: "6px",
+                color: "#333"
+              }}>
+                Tree Scale: {tileSettings.treeScale.toFixed(1)}x
+              </label>
+              <input
+                type="range"
+                min="0.1"
+                max="3.0"
+                step="0.1"
+                value={tileSettings.treeScale}
+                onChange={(e) => setTileSettings(prev => ({ 
+                  ...prev, 
+                  treeScale: parseFloat(e.target.value) 
+                }))}
+                style={{
+                  width: "100%",
+                  height: "6px",
+                  background: "#ddd",
+                  outline: "none",
+                  borderRadius: "3px",
+                  cursor: "pointer"
+                }}
+              />
+              <div style={{ 
+                display: "flex", 
+                justifyContent: "space-between", 
+                fontSize: "10px", 
+                color: "#666",
+                marginTop: "4px"
+              }}>
+                <span>0.1x</span>
+                <span>3.0x</span>
+              </div>
+            </div>
+          )}
+          
           <p style={{ 
             margin: "8px 0 0 0", 
             fontSize: "11px", 
             color: "#666",
             lineHeight: "1.4"
           }}>
-            Procedural terrain based on coordinates. Guaranteed to work!
+            Procedural terrain with scalable trees. Guaranteed to work!
           </p>
         </div>
       </div>
@@ -243,14 +289,15 @@ export default function Home() {
         
         {/* Basic Terrain Mesh */}
         {showTileMesh && (
-          <BasicTerrainMesh
-            centerLat={tileSettings.centerLat}
-            centerLng={tileSettings.centerLng}
-            zoom={tileSettings.zoom}
-            meshSize={tileSettings.meshSize}
-            heightScale={tileSettings.heightScale}
-            onTileLoad={handleTileLoad}
-          />
+                 <BasicTerrainMesh
+                   centerLat={tileSettings.centerLat}
+                   centerLng={tileSettings.centerLng}
+                   zoom={tileSettings.zoom}
+                   meshSize={tileSettings.meshSize}
+                   heightScale={tileSettings.heightScale}
+                   treeScale={tileSettings.treeScale}
+                   onTileLoad={handleTileLoad}
+                 />
         )}
         
         {/* Transform Controls System */}

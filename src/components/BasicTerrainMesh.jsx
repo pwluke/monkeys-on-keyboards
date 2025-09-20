@@ -9,6 +9,7 @@ export default function BasicTerrainMesh({
   zoom = 10,
   meshSize = 200,
   heightScale = 1,
+  treeScale = 1,
   onTileLoad
 }) {
   const meshRef = useRef();
@@ -137,19 +138,19 @@ export default function BasicTerrainMesh({
         const x = (Math.random() - 0.5) * meshSize * 0.8;
         const z = (Math.random() - 0.5) * meshSize * 0.8;
         
-        // Create tree trunk
-        const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.8, 8, 8);
+        // Create tree trunk with scale
+        const trunkGeometry = new THREE.CylinderGeometry(0.5 * treeScale, 0.8 * treeScale, 8 * treeScale, 8);
         const trunkMaterial = new THREE.MeshLambertMaterial({ color: '#8b4513' });
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-        trunk.position.set(x, 4, z);
+        trunk.position.set(x, 4 * treeScale, z);
         trunk.userData.isTree = true;
         scene.add(trunk);
         
-        // Create tree canopy
-        const canopyGeometry = new THREE.SphereGeometry(3, 8, 6);
+        // Create tree canopy with scale
+        const canopyGeometry = new THREE.SphereGeometry(3 * treeScale, 8, 6);
         const canopyMaterial = new THREE.MeshLambertMaterial({ color: '#228b22' });
         const canopy = new THREE.Mesh(canopyGeometry, canopyMaterial);
-        canopy.position.set(x, 10, z);
+        canopy.position.set(x, 10 * treeScale, z);
         canopy.scale.set(1, 0.8, 1); // Flatten slightly
         canopy.userData.isTree = true;
         scene.add(canopy);
@@ -168,7 +169,7 @@ export default function BasicTerrainMesh({
   // Create terrain on mount
   useEffect(() => {
     createTerrain();
-  }, [centerLat, centerLng, zoom, meshSize, heightScale]);
+  }, [centerLat, centerLng, zoom, meshSize, heightScale, treeScale]);
 
   // Cleanup on unmount
   useEffect(() => {
