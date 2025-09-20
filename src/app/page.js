@@ -18,6 +18,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { ChevronDown } from "lucide-react";
 import SceneControls from "@/components/SceneControls";
 import Snake from "@/components/snake";
+import BasicTerrainMesh from "@/components/BasicTerrainTile";
 
 import ArtPiece from "@/components/ArtPiece";
 import CubeInstances from "@/components/matrix";
@@ -29,7 +30,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ViewSelector } from "@/components/ViewSelector";
 import { useTheme } from "next-themes";
 import { useAtom } from "jotai";
-import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom, showSnakeAtom } from "@/lib/atoms";
+import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom, showSnakeAtom, showTreesAtom, showLabelsAtom } from "@/lib/atoms";
 
 
 export default function Home() {
@@ -74,6 +75,8 @@ export default function Home() {
   const [showViewportControls, setShowViewportControls] = useAtom(showViewportControlsAtom);
   const [showGeolocation, setShowGeolocation] = useAtom(showGeolocationAtom);
   const [showSnake, setShowSnake] = useAtom(showSnakeAtom);
+  const [showTrees, setShowTrees] = useAtom(showTreesAtom);
+  const [showLabels, setShowLabels] = useAtom(showLabelsAtom);
 
   // Collapsible panel states
   const [panelStates, setPanelStates] = useState({
@@ -230,7 +233,9 @@ export default function Home() {
             ...(showArtPiece ? ['artPiece'] : []),
             ...(showGuggenheim ? ['guggenheimStructure'] : []),
             ...(showTransformControls ? ['transformControls'] : []),
-            ...(showSnake ? ['snake'] : [])
+            ...(showSnake ? ['snake'] : []),
+            ...(showTrees ? ['trees'] : []),
+            ...(showLabels ? ['labels'] : [])
           ]}
           onValueChange={(values) => {
             console.log('ToggleGroup values changed:', values);
@@ -239,6 +244,8 @@ export default function Home() {
             setShowGuggenheim(values.includes('guggenheimStructure'));
             setShowTransformControls(values.includes('transformControls'));
             setShowSnake(values.includes('snake'));
+            setShowTrees(values.includes('trees'));
+            setShowLabels(values.includes('labels'));
           }}
         >
           <ToggleGroupItem
@@ -270,6 +277,18 @@ export default function Home() {
             className="px-3 py-2 text-xs"
           >
             Snake
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="trees"
+            className="px-3 py-2 text-xs"
+          >
+            Trees
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="labels"
+            className="px-3 py-2 text-xs"
+          >
+            Labels
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
@@ -414,6 +433,8 @@ export default function Home() {
         {showArtPiece && <ArtPiece />}
         {showGuggenheim && <GuggenheimStructure isRotating={true} shape="koala" />}
         {showCubeInstances && <CubeInstances />}
+        {showTrees && <BasicTerrainMesh />}
+        {/* {showLabels && <Labels />} */}
         
         {/* Viewport Animator */}
         <ViewportAnimator 
