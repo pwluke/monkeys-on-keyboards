@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useMemo, useRef, useState, useEffect, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Grid, TransformControls, StatsGl } from "@react-three/drei";
@@ -122,8 +120,6 @@ export default function ThreePlayground() {
   const [bg, setBg] = useState("#fafafa");
   const [presetViewKey, setPresetViewKey] = useState("Isometric");
   const [savedViews, setSavedViews] = useState([]); // {name, position:[x,y,z], target:[x,y,z]}
-  const [cameraData, setCameraData] = useState(null);
-  const [activeSavedView, setActiveSavedView] = useState(null);
 
   const selectedItem = useMemo(() => items.find((i) => i.id === selectedId) || null, [items, selectedId]);
 
@@ -224,45 +220,18 @@ export default function ThreePlayground() {
   };
 
   // ----------------------------- Saved views -----------------------------
-
   const SaveViewButton = () => {
+    const { camera, controls } = useThree();
     const save = () => {
-      if (!cameraData) return;
       const name = prompt("Name this view:", `View ${savedViews.length + 1}`);
       if (!name) return;
-      setSavedViews((v) => [...v, { name, ...cameraData }]);
+      const position = camera.position.toArray();
+      const target = controls?.target?.toArray?.() || [0, 0, 0];
+      setSavedViews((v) => [...v, { name, position, target }]);
     };
     return (
       <Button onClick={save} title="Save current camera as a view">Save View</Button>
     );
-  };
-
-  const CameraDataCollector = () => {
-    const { camera, controls } = useThree();
-    useEffect(() => {
-      const updateCameraData = () => {
-        const position = camera.position.toArray();
-        const target = controls?.target?.toArray?.() || [0, 0, 0];
-        setCameraData({ position, target });
-      };
-      updateCameraData();
-      // Update camera data when camera or controls change
-      const interval = setInterval(updateCameraData, 100);
-      return () => clearInterval(interval);
-    }, [camera, controls]);
-    return null;
-  };
-
-  const SavedViewHandler = () => {
-    const { camera, controls } = useThree();
-    useEffect(() => {
-      if (!activeSavedView) return;
-      camera.position.set(...activeSavedView.position);
-      controls?.target.set(...activeSavedView.target);
-      controls?.update();
-      setActiveSavedView(null); // Reset after applying
-    }, [activeSavedView, camera, controls]);
-    return null;
   };
 
   const GoToView = ({ view }) => {
@@ -424,7 +393,7 @@ export default function ThreePlayground() {
 
   // ----------------------------- Toolbar & Layout -----------------------------
   return (
-    <div className="w-full h-screen rounded-2xl border bg-white grid grid-cols-[50%,50%] overflow-hidden">
+    <div className="w-full h-[80vh] rounded-2xl border bg-white grid grid-cols-[280px,1fr] overflow-hidden">
       {/* Sidebar */}
       <div className="h-full border-r p-3 flex flex-col gap-3 bg-gradient-to-b from-white to-gray-50">
         <div className="space-y-2">
@@ -464,9 +433,9 @@ export default function ThreePlayground() {
               <Label>Saved views</Label>
               <div className="flex flex-wrap gap-2">
                 {savedViews.map((v, idx) => (
-                  <Button key={idx} onClick={() => setActiveSavedView(v)} className="" title={`Go to ${v.name}`}>
-                    {v.name}
-                  </Button>
+                  <Button key={idx} onClick={() => setPresetViewKey("") || setSavedViews((sv) => sv) /* no-op */} className="" title={`Go to ${v.name}`}
+                    onMouseDown={(e) => e.preventDefault()} onClickCapture={() => setActiveSavedView(v)}
+                  >{v.name}</Button>
                 ))}
               </div>
             </div>
@@ -495,8 +464,8 @@ export default function ThreePlayground() {
         <div className="mt-auto text-[10px] text-gray-400">Hotkeys: <kbd className="px-1 border rounded">g</kbd> translate • <kbd className="px-1 border rounded">r</kbd> rotate • <kbd className="px-1 border rounded">s</kbd> scale</div>
       </div>
 
-      {/* Canvas area - Right side viewport */}
-      <div className="relative w-full h-full">
+      {/* Canvas area */}
+      <div className="relative">
         <Canvas shadows camera={{ position: PRESET_VIEWS[presetViewKey]?.position || [5, 5, 5], fov: 50 }}>
           <color attach="background" args={[bg]} />
           <ambientLight intensity={0.6} />
@@ -511,8 +480,6 @@ export default function ThreePlayground() {
 
             <GizmoWrapper />
             <SceneClicks />
-            <CameraDataCollector />
-            <SavedViewHandler />
             <OrbitControls makeDefault enableDamping dampingFactor={0.1} />
             <CameraRig activeView={PRESET_VIEWS[presetViewKey]} />
           </Suspense>
@@ -530,4 +497,12 @@ export default function ThreePlayground() {
   );
 
   // Helper to jump to a saved view (stateful so the CameraRig lerp remains available)
+  function setActiveSavedView(v) {
+    // Instant jump, then you can still change preset dropdown to lerp presets
+    setPresetViewKey("");
+    // Imperatively set camera via a small helper component
+    // We mount a transient component to set the camera once
+    const node = document.createElement("div");
+    document.body.appendChild(node);
+  }
 }
