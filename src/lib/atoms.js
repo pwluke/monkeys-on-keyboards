@@ -6,6 +6,12 @@ export const showArtPieceAtom = atom(true);
 export const showTransformControlsAtom = atom(true);
 export const showViewportControlsAtom = atom(true);
 export const showGeolocationAtom = atom(true);
+export const showSnakeAtom = atom(false);
+export const showTreesAtom = atom(false);
+export const showLabelsAtom = atom(false);
+
+
+export const showVideoIntroAtom = atom(false);
 
 // Default matrices - similar to the ones in the matrix component
 const defaultMatrices = [

@@ -29,66 +29,8 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ViewSelector } from "@/components/ViewSelector";
 import { useTheme } from "next-themes";
 import { useAtom } from "jotai";
-import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom } from "@/lib/atoms";
+import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom, showSnakeAtom } from "@/lib/atoms";
 
-
-function Shape({ type, position }) {
-  const [currentView] = useAtom(currentViewAtom);
-  const [isArctic] = useAtom(isArcticAtom);
-  const [isTransparent] = useAtom(isTransparentAtom);
-  const [isLineweight] = useAtom(isLineweightAtom);
-
-  const materialProps = {
-    color: isArctic ? "white" : undefined,
-    transparent: isTransparent || isLineweight,
-    opacity: isTransparent ? 0.7 : isLineweight ? 0.1 : 1,
-  };
-
-  switch (type) {
-    case "box":
-      return (
-        <mesh position={position}>
-          <boxGeometry />
-          <meshStandardMaterial color="red" {...materialProps} />
-          {isLineweight && <Edges />}
-        </mesh>
-      );
-    case "cone":
-      return (
-        <mesh position={position}>
-          <coneGeometry />
-          <meshStandardMaterial color="blue" {...materialProps} />
-          {isLineweight && <Edges />}
-        </mesh>
-      );
-    case "sphere":
-      return (
-        <mesh position={position}>
-          <sphereGeometry />
-          <meshStandardMaterial color="green" {...materialProps} />
-          {isLineweight && <Edges />}
-        </mesh>
-      );    
-    case "cylinder":
-      return (
-        <mesh position={position}>
-          <cylinderGeometry />
-          <meshStandardMaterial color="yellow" {...materialProps} />
-          {isLineweight && <Edges />}
-        </mesh>
-      );
-    case "torus":
-      return (
-        <mesh position={position}>
-          <torusGeometry />
-          <meshStandardMaterial color="purple" {...materialProps} />
-          {isLineweight && <Edges />}
-        </mesh>
-      );
-    default:
-      return null;
-  }
-}
 
 export default function Home() {
   const [objects, setObjects] = useState([
@@ -131,6 +73,7 @@ export default function Home() {
   const [showTransformControls, setShowTransformControls] = useAtom(showTransformControlsAtom);
   const [showViewportControls, setShowViewportControls] = useAtom(showViewportControlsAtom);
   const [showGeolocation, setShowGeolocation] = useAtom(showGeolocationAtom);
+  const [showSnake, setShowSnake] = useAtom(showSnakeAtom);
 
   // Collapsible panel states
   const [panelStates, setPanelStates] = useState({
@@ -260,33 +203,6 @@ export default function Home() {
     setShowVideoIntro(false);
   };
 
-  const handleToggleElement = (element) => {
-    console.log(`Toggling ${element}`);
-    switch (element) {
-      case "cubeInstances":
-        console.log(`CubeInstances before: ${showCubeInstances}, after: ${!showCubeInstances}`);
-        setShowCubeInstances(!showCubeInstances);
-        break;
-      case "artPiece":
-        console.log(`ArtPiece before: ${showArtPiece}, after: ${!showArtPiece}`);
-        setShowArtPiece(!showArtPiece);
-        break;
-      case "guggenheimStructure":
-        console.log(`Guggenheim before: ${showGuggenheim}, after: ${!showGuggenheim}`);
-        setShowGuggenheim(!showGuggenheim);
-        break;
-      case "transformControls":
-        console.log(`TransformControls before: ${showTransformControls}, after: ${!showTransformControls}`);
-        setShowTransformControls(!showTransformControls);
-        break;
-      case "viewportControls":
-        setShowViewportControls(!showViewportControls);
-        break;
-      case "geolocation":
-        setShowGeolocation(!showGeolocation);
-        break;
-    }
-  };
 
   const togglePanel = (panelName) => {
     setPanelStates(prev => ({
@@ -306,38 +222,54 @@ export default function Home() {
       {/* Toggle Group at the top */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
         <div className="text-sm font-medium mb-2">Scene Elements</div>
-        <ToggleGroup type="multiple" className="gap-2">
+        <ToggleGroup 
+          type="multiple" 
+          className="gap-2"
+          value={[
+            ...(showCubeInstances ? ['cubeInstances'] : []),
+            ...(showArtPiece ? ['artPiece'] : []),
+            ...(showGuggenheim ? ['guggenheimStructure'] : []),
+            ...(showTransformControls ? ['transformControls'] : []),
+            ...(showSnake ? ['snake'] : [])
+          ]}
+          onValueChange={(values) => {
+            console.log('ToggleGroup values changed:', values);
+            setShowCubeInstances(values.includes('cubeInstances'));
+            setShowArtPiece(values.includes('artPiece'));
+            setShowGuggenheim(values.includes('guggenheimStructure'));
+            setShowTransformControls(values.includes('transformControls'));
+            setShowSnake(values.includes('snake'));
+          }}
+        >
           <ToggleGroupItem
             value="cubeInstances"
-            pressed={showCubeInstances}
-            onPressedChange={() => handleToggleElement('cubeInstances')}
             className="px-3 py-2 text-xs"
           >
             Cube Instances
           </ToggleGroupItem>
           <ToggleGroupItem
             value="artPiece"
-            pressed={showArtPiece}
-            onPressedChange={() => handleToggleElement('artPiece')}
             className="px-3 py-2 text-xs"
           >
             Art Piece
           </ToggleGroupItem>
           <ToggleGroupItem
             value="guggenheimStructure"
-            pressed={showGuggenheim}
-            onPressedChange={() => handleToggleElement('guggenheimStructure')}
             className="px-3 py-2 text-xs"
           >
             Guggenheim
           </ToggleGroupItem>
           <ToggleGroupItem
             value="transformControls"
-            pressed={showTransformControls}
-            onPressedChange={() => handleToggleElement('transformControls')}
             className="px-3 py-2 text-xs"
           >
             Shapes/Transform
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="snake"
+            className="px-3 py-2 text-xs"
+          >
+            Snake
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
@@ -476,7 +408,7 @@ export default function Home() {
         <Environment preset="studio" />
         <ambientLight intensity={isArctic ? 4 : 2.5} />
         <directionalLight position={[1, 1, 1]} />
-        <Snake />
+        {showSnake && <Snake />}
         
         {/* Conditionally rendered scene elements */}
         {showArtPiece && <ArtPiece />}
