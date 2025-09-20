@@ -13,6 +13,9 @@ import ViewportAnimator from "@/components/ViewportAnimator";
 import GeolocationPanel from "@/components/GeolocationPanel";
 import BackgroundSwitcher from "@/components/background";
 import VideoIntro from "@/components/VideoIntro";
+import FalAIPanel from "@/components/FalAIPanel";
+import CanvasCapture from "@/components/CanvasCapture";
+import AIImageOverlay from "@/components/AIImageOverlay";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
@@ -34,6 +37,7 @@ import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, sho
 
 
 export default function Home() {
+  const canvasCaptureRef = useRef();
   const [objects, setObjects] = useState([
     // { 
     //   type: "box", 
@@ -60,6 +64,7 @@ export default function Home() {
   const [viewPreset, setViewPreset] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showVideoIntro, setShowVideoIntro] = useState(true);
+  const [overlayImageUrl, setOverlayImageUrl] = useState(null);
 
   // Toggle controls for scene elements
   // const [visibleElements, setVisibleElements] = useState({
@@ -88,7 +93,8 @@ export default function Home() {
     matrixInput: false,
     transformUI: false,
     viewportControls: false,
-    geolocation: false
+    geolocation: false,
+    falAI: false
   });
   const [currentView] = useAtom(currentViewAtom);
   const [isArctic] = useAtom(isArcticAtom);
@@ -206,6 +212,20 @@ export default function Home() {
     setShowVideoIntro(false);
   };
 
+  const handleAIImageGenerated = (imageUrl) => {
+    setOverlayImageUrl(imageUrl);
+  };
+
+  const handleCloseOverlay = () => {
+    setOverlayImageUrl(null);
+  };
+
+  const handleRegenerateImage = () => {
+    // Close overlay and trigger regeneration
+    setOverlayImageUrl(null);
+    // The FalAIPanel can handle regeneration internally
+  };
+
 
   const togglePanel = (panelName) => {
     setPanelStates(prev => ({
@@ -220,6 +240,13 @@ export default function Home() {
     <BackgroundSwitcher>
       {/* Video Intro */}
       {showVideoIntro && <VideoIntro onComplete={handleVideoIntroComplete} />}
+      
+      {/* AI Image Overlay */}
+      <AIImageOverlay 
+        imageUrl={overlayImageUrl}
+        onClose={handleCloseOverlay}
+        onRegenerate={handleRegenerateImage}
+      />
       
       <div className="h-screen w-screen max-h-screen relative">
       {/* Toggle Group at the top */}
@@ -418,12 +445,28 @@ export default function Home() {
             />
           </CollapsibleContent>
         </Collapsible>
+
+        {/* FAL AI Panel */}
+        <Collapsible open={panelStates.falAI} onOpenChange={() => togglePanel('falAI')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">FAL AI Generation</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.falAI ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <FalAIPanel 
+              canvasCaptureRef={canvasCaptureRef} 
+              onImageGenerated={handleAIImageGenerated}
+            />
+          </CollapsibleContent>
+        </Collapsible>
       </div>
 
       <Canvas 
         shadows={isArctic} 
         camera={{ position: [-5, 5, 5], fov: 50 }}  
-        onClick={handleCanvasClick}>
+        onClick={handleCanvasClick}
+        gl={{ preserveDrawingBuffer: true }}>
+        <CanvasCapture ref={canvasCaptureRef} />
         <Environment preset="studio" />
         <ambientLight intensity={isArctic ? 4 : 2.5} />
         <directionalLight position={[1, 1, 1]} />
