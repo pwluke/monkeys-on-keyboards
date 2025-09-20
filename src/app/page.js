@@ -6,6 +6,8 @@ import { ObjectSelector } from "@/components/ObjectSelector";
 import EffectSelector from "@/components/ui/EffectSelector";
 import ColorPickerPanel from "@/components/ui/ColorPickerPanel";
 
+import ArtPiece from "@/components/ArtPiece";
+
 function Shape({ type, position, color, effect }) {
   // Compute effect-driven material settings
   let materialProps = {};
@@ -127,8 +129,9 @@ export default function Home() {
 
       <Canvas>
         <Environment preset="studio" />
-        <ambientLight intensity={2.5} />
+        <ambientLight intensity={0.5} />
         <directionalLight position={[1, 1, 1]} />
+        <ArtPiece />
         {objects.map((obj) => (
           <Shape
             key={obj.id}
