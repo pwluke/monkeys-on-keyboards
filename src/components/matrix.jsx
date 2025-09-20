@@ -19,7 +19,7 @@ export default function CubeInstances() {
 
         return (
           <mesh key={i} matrix={mat} matrixAutoUpdate={false}>
-            <boxGeometry args={[5, 5, 5]} /> {/* Cube size */}
+            <boxGeometry args={[2, 2, 2]} /> {/* Cube size */}
             <meshStandardMaterial color="orange" />
           </mesh>
         );
