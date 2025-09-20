@@ -11,6 +11,8 @@ import ObjectSelectionPanel from "@/components/ObjectSelectionPanel";
 import ViewportControls from "@/components/ViewportControls";
 import ViewportAnimator from "@/components/ViewportAnimator";
 import GeolocationPanel from "@/components/GeolocationPanel";
+import BackgroundSwitcher from "@/components/background";
+import VideoIntro from "@/components/VideoIntro";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
@@ -26,7 +28,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ViewSelector } from "@/components/ViewSelector";
 import { useTheme } from "next-themes";
 import { useAtom } from "jotai";
-import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom } from "@/lib/atoms";
+import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom } from "@/lib/atoms";
 
 
 function Shape({ type, position }) {
@@ -113,14 +115,21 @@ export default function Home() {
   const [activeView, setActiveView] = useState("Perspective");
   const [viewPreset, setViewPreset] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showVideoIntro, setShowVideoIntro] = useState(true);
 
   // Toggle controls for scene elements
-  const [visibleElements, setVisibleElements] = useState({
-    cubeInstances: true,
-    artPiece: true,
-    guggenheimStructure: true,
-    transformControls: true
-  });
+  // const [visibleElements, setVisibleElements] = useState({
+  //   cubeInstances: true,
+  //   artPiece: true,
+  //   guggenheimStructure: true,
+  //   transformControls: true
+  // });
+  const [showGuggenheim, setShowGuggenheim] = useAtom(showGuggenheimAtom);
+  const [showCubeInstances, setShowCubeInstances] = useAtom(showCubeInstancesAtom);
+  const [showArtPiece, setShowArtPiece] = useAtom(showArtPieceAtom);
+  const [showTransformControls, setShowTransformControls] = useAtom(showTransformControlsAtom);
+  const [showViewportControls, setShowViewportControls] = useAtom(showViewportControlsAtom);
+  const [showGeolocation, setShowGeolocation] = useAtom(showGeolocationAtom);
 
   // Collapsible panel states
   const [panelStates, setPanelStates] = useState({
@@ -246,11 +255,31 @@ export default function Home() {
     setIsAnimating(false);
   };
 
+  const handleVideoIntroComplete = () => {
+    setShowVideoIntro(false);
+  };
+
   const handleToggleElement = (element) => {
-    setVisibleElements(prev => ({
-      ...prev,
-      [element]: !prev[element]
-    }));
+    switch (element) {
+      case "cubeInstances":
+        setShowCubeInstances(!showCubeInstances);
+        break;
+      case "artPiece":
+        setShowArtPiece(!showArtPiece);
+        break;
+      case "guggenheimStructure":
+        setShowGuggenheim(!showGuggenheim);
+        break;
+      case "transformControls":
+        setShowTransformControls(!showTransformControls);
+        break;
+      case "viewportControls":
+        setShowViewportControls(!showViewportControls);
+        break;
+      case "geolocation":
+        setShowGeolocation(!showGeolocation);
+        break;
+    }
   };
 
   const togglePanel = (panelName) => {
@@ -263,14 +292,18 @@ export default function Home() {
   const selectedObject = objects.find(obj => obj.id === selectedId);
 
   return (
-    <div className="h-screen w-screen max-h-screen relative">
+    <BackgroundSwitcher>
+      {/* Video Intro */}
+      {showVideoIntro && <VideoIntro onComplete={handleVideoIntroComplete} />}
+      
+      <div className="h-screen w-screen max-h-screen relative">
       {/* Toggle Group at the top */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
         <div className="text-sm font-medium mb-2">Scene Elements</div>
         <ToggleGroup type="multiple" className="gap-2">
           <ToggleGroupItem
             value="cubeInstances"
-            pressed={visibleElements.cubeInstances}
+            pressed={showCubeInstances}
             onPressedChange={() => handleToggleElement('cubeInstances')}
             className="px-3 py-2 text-xs"
           >
@@ -278,7 +311,7 @@ export default function Home() {
           </ToggleGroupItem>
           <ToggleGroupItem
             value="artPiece"
-            pressed={visibleElements.artPiece}
+            pressed={showArtPiece}
             onPressedChange={() => handleToggleElement('artPiece')}
             className="px-3 py-2 text-xs"
           >
@@ -286,7 +319,7 @@ export default function Home() {
           </ToggleGroupItem>
           <ToggleGroupItem
             value="guggenheimStructure"
-            pressed={visibleElements.guggenheimStructure}
+            pressed={showGuggenheim}
             onPressedChange={() => handleToggleElement('guggenheimStructure')}
             className="px-3 py-2 text-xs"
           >
@@ -294,7 +327,7 @@ export default function Home() {
           </ToggleGroupItem>
           <ToggleGroupItem
             value="transformControls"
-            pressed={visibleElements.transformControls}
+            pressed={showTransformControls}
             onPressedChange={() => handleToggleElement('transformControls')}
             className="px-3 py-2 text-xs"
           >
@@ -303,7 +336,7 @@ export default function Home() {
         </ToggleGroup>
       </div>
 
-      <div className="absolute top-4 left-4 z-10 grid gap-2 max-h-screen overflow-y-auto w-80">
+      <div className="absolute top-24 left-4 z-10 grid gap-2 max-h-screen overflow-y-auto w-80">
         {/* Object Selector Panel */}
 
         <ViewSelector />
@@ -439,9 +472,9 @@ export default function Home() {
         <directionalLight position={[1, 1, 1]} />
         
         {/* Conditionally rendered scene elements */}
-        {visibleElements.artPiece && <ArtPiece />}
-        {visibleElements.guggenheimStructure && <GuggenheimStructure isRotating={true} shape="koala" />}
-        {visibleElements.cubeInstances && <CubeInstances />}
+        {showArtPiece && <ArtPiece />}
+        {showGuggenheim && <GuggenheimStructure isRotating={true} shape="koala" />}
+        {showCubeInstances && <CubeInstances />}
         
         {/* Viewport Animator */}
         <ViewportAnimator 
@@ -452,7 +485,7 @@ export default function Home() {
         />
         
         {/* Transform Controls System - conditionally rendered */}
-        {visibleElements.transformControls && (
+        {showTransformControls && (
           <TransformControls
             objects={objects}
             selectedId={selectedId}
@@ -468,6 +501,7 @@ export default function Home() {
 
         <axesHelper args={[5]} />
         </Canvas>
-        </div>
+      </div>
+    </BackgroundSwitcher>
   );
 }
