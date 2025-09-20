@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Grid, OrbitControls } from "@react-three/drei";
+import { Grid, OrbitControls, Environment } from "@react-three/drei";
 import { ObjectSelector } from "@/components/ObjectSelector";
 import EffectSelector from "@/components/ui/EffectSelector";
 import ColorPickerPanel from "@/components/ui/ColorPickerPanel";
@@ -126,6 +126,7 @@ export default function Home() {
       </div>
 
       <Canvas>
+        <Environment preset="studio" />
         <ambientLight intensity={2.5} />
         <directionalLight position={[1, 1, 1]} />
         {objects.map((obj) => (
