@@ -1,6 +1,9 @@
 "use client";
 import { useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
+import { useAtom } from "jotai";
+import { isArcticAtom, isTransparentAtom, isLineweightAtom } from "@/lib/atoms";
+import { Edges } from "@react-three/drei";
 import * as THREE from "three";
 
 export default function ClickableObject({ 
@@ -11,6 +14,9 @@ export default function ClickableObject({
 }) {
   const meshRef = useRef();
   const { camera, raycaster, mouse } = useThree();
+  const [isArctic] = useAtom(isArcticAtom);
+  const [isTransparent] = useAtom(isTransparentAtom);
+  const [isLineweight] = useAtom(isLineweightAtom);
   
   // Add outline effect for selected objects
   useFrame(() => {
@@ -49,16 +55,26 @@ export default function ClickableObject({
       receiveShadow: true
     };
 
+    // Apply view overrides for material properties
+    const materialProps = {
+      color: isArctic ? "white" : (object.color || "red"),
+      transparent: isTransparent || isLineweight,
+      opacity: isTransparent ? 0.7 : isLineweight ? 0.1 : 1,
+      wireframe: isLineweight
+    };
+
+    const defaultColors = { box: "red", cone: "blue", sphere: "green" };
+
     switch (object.type) {
       case "box":
         return (
           <mesh {...commonProps}>
             <boxGeometry />
             <meshStandardMaterial 
-              color={object.color || "red"} 
-              transparent={false}
-              opacity={1}
+              {...materialProps}
+              color={isArctic ? "white" : (object.color || defaultColors.box)}
             />
+            {isLineweight && <Edges />}
           </mesh>
         );
       case "cone":
@@ -66,10 +82,10 @@ export default function ClickableObject({
           <mesh {...commonProps}>
             <coneGeometry />
             <meshStandardMaterial 
-              color={object.color || "blue"} 
-              transparent={false}
-              opacity={1}
+              {...materialProps}
+              color={isArctic ? "white" : (object.color || defaultColors.cone)}
             />
+            {isLineweight && <Edges />}
           </mesh>
         );
       case "sphere":
@@ -77,10 +93,10 @@ export default function ClickableObject({
           <mesh {...commonProps}>
             <sphereGeometry />
             <meshStandardMaterial 
-              color={object.color || "green"} 
-              transparent={false}
-              opacity={1}
+              {...materialProps}
+              color={isArctic ? "white" : (object.color || defaultColors.sphere)}
             />
+            {isLineweight && <Edges />}
           </mesh>
         );
       default:

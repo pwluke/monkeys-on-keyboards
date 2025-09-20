@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Grid, OrbitControls, Environment } from "@react-three/drei";
+import { Grid, OrbitControls, Environment, Edges } from "@react-three/drei";
 import { ObjectSelector } from "@/components/ObjectSelector";
 import EffectSelector from "@/components/ui/EffectSelector";
 import ColorPickerPanel from "@/components/ui/ColorPickerPanel";
@@ -24,16 +24,20 @@ import GuggenheimStructure from "@/components/BlueKoala";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ViewSelector } from "@/components/ViewSelector";
 import { useTheme } from "next-themes";
+import { useAtom } from "jotai";
+import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom } from "@/lib/atoms";
 
 
-function Shape({ type, position, view }) {
-  const isLineweight = view === "lineweight";
-  const isArctic = view === "arctic";
+function Shape({ type, position }) {
+  const [currentView] = useAtom(currentViewAtom);
+  const [isArctic] = useAtom(isArcticAtom);
+  const [isTransparent] = useAtom(isTransparentAtom);
+  const [isLineweight] = useAtom(isLineweightAtom);
 
   const materialProps = {
     color: isArctic ? "white" : undefined,
-    transparent: view === "transparent" || isLineweight,
-    opacity: view === "transparent" ? 0.7 : isLineweight ? 0.1 : 1,
+    transparent: isTransparent || isLineweight,
+    opacity: isTransparent ? 0.7 : isLineweight ? 0.1 : 1,
   };
 
   switch (type) {
@@ -129,7 +133,8 @@ export default function Home() {
     viewportControls: false,
     geolocation: false
   });
-  const [view, setView] = useState("default");
+  const [currentView] = useAtom(currentViewAtom);
+  const [isArctic] = useAtom(isArcticAtom);
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -293,7 +298,7 @@ export default function Home() {
       <div className="absolute top-4 left-4 z-10 grid gap-2 max-h-screen overflow-y-auto w-80">
         {/* Object Selector Panel */}
 
-        <ViewSelector onViewChange={handleViewChange} currentView={view} />
+        <ViewSelector />
         <ThemeToggle theme={theme} />
         <Collapsible open={panelStates.objectSelector} onOpenChange={() => togglePanel('objectSelector')}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
@@ -414,11 +419,11 @@ export default function Home() {
       </div>
 
       <Canvas 
-        shadows={view === "arctic"} 
+        shadows={isArctic} 
         camera={{ position: [-5, 5, 5], fov: 50 }}  
         onClick={handleCanvasClick}>
         <Environment preset="studio" />
-        <ambientLight intensity={view === "arctic" ? 4 : 2.5} />
+        <ambientLight intensity={isArctic ? 4 : 2.5} />
         <directionalLight position={[1, 1, 1]} />
         
         {/* Conditionally rendered scene elements */}
