@@ -31,14 +31,15 @@ export default function ArtPiece() {
   const [shapes, setShapes] = useState([]);
 
   const handlePlaneClick = (event) => {
-    if (shapes.length >= 10) return;
+    if (shapes.length >= 20) return;
 
     event.stopPropagation();
 
     const shapeTypes = ['cube', 'cylinder', 'sphere'];
     const randomShapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
     const randomColor = new THREE.Color(Math.random(), Math.random(), Math.random());
-    const randomScale = Math.random() * 0.5 + 0.2;
+    // Double the size of the shapes
+    const randomScale = (Math.random() * 0.5 + 0.2) * 2;
     const randomRotation = new THREE.Euler(
       Math.random() * Math.PI,
       Math.random() * Math.PI,
