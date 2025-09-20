@@ -1,17 +1,14 @@
-
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Grid, OrbitControls } from "@react-three/drei";
 import { ObjectSelector } from "@/components/ObjectSelector";
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
 import EffectSelector from "@/components/ui/EffectSelector";
+import ColorPickerPanel from "@/components/ui/ColorPickerPanel";
 
-function Shape({ type, position, effect }) {
-  // Effect-based material properties
+function Shape({ type, position, color, effect }) {
+  // Compute effect-driven material settings
   let materialProps = {};
-  const meshRef = useRef();
   switch (effect) {
     case "metallic":
       materialProps = { metalness: 1, roughness: 0.2 };
@@ -29,23 +26,26 @@ function Shape({ type, position, effect }) {
       materialProps = { metalness: 0.25, roughness: 0, opacity: 0.3, transparent: true };
       break;
     case "textured":
-      // Placeholder: would need a texture map
-      materialProps = { metalness: 0.2, roughness: 0.7 }; // Add map prop for real texture
+      // Placeholder for a real texture: add map/normalMap here when available
+      materialProps = { metalness: 0.2, roughness: 0.7 };
       break;
     case "emissive":
       materialProps = { metalness: 0.1, roughness: 0.5, emissive: "yellow", emissiveIntensity: 1 };
       break;
     case "toon":
-      materialProps = { metalness: 0, roughness: 0.8 }; // Would use MeshToonMaterial for real toon
+      // Would swap to MeshToonMaterial for a true toon effect
+      materialProps = { metalness: 0, roughness: 0.8 };
       break;
     case "wireframe":
       materialProps = { metalness: 0, roughness: 0.5, wireframe: true };
       break;
     case "bumpy":
-      materialProps = { metalness: 0.3, roughness: 0.7 }; // Would use normalMap for real bumps
+      // Would attach a normalMap for real bumpiness
+      materialProps = { metalness: 0.3, roughness: 0.7 };
       break;
     case "fresnel":
-      materialProps = { metalness: 0.2, roughness: 0.5 }; // Would need custom shader for real fresnel
+      // True fresnel would need a custom shader
+      materialProps = { metalness: 0.2, roughness: 0.5 };
       break;
     case "holographic":
       materialProps = { metalness: 1, roughness: 0, envMapIntensity: 2, opacity: 0.7, transparent: true, color: "#00ffff" };
@@ -56,26 +56,33 @@ function Shape({ type, position, effect }) {
     default:
       materialProps = { metalness: 0, roughness: 0.5 };
   }
+
+  const meshRef = useRef();
+
+  // Default color per shape if none provided
+  const defaultColorByType = { box: "red", cone: "blue", sphere: "green" };
+  const finalColor = color || defaultColorByType[type] || "white";
+
   switch (type) {
     case "box":
       return (
         <mesh ref={meshRef} position={position}>
           <boxGeometry />
-          <meshStandardMaterial color="red" {...materialProps} />
+          <meshStandardMaterial color={finalColor} {...materialProps} />
         </mesh>
       );
     case "cone":
       return (
         <mesh ref={meshRef} position={position}>
           <coneGeometry />
-          <meshStandardMaterial color="blue" {...materialProps} />
+          <meshStandardMaterial color={finalColor} {...materialProps} />
         </mesh>
       );
     case "sphere":
       return (
         <mesh ref={meshRef} position={position}>
           <sphereGeometry />
-          <meshStandardMaterial color="green" {...materialProps} />
+          <meshStandardMaterial color={finalColor} {...materialProps} />
         </mesh>
       );
     default:
@@ -85,33 +92,50 @@ function Shape({ type, position, effect }) {
 
 export default function Home() {
   const [objects, setObjects] = useState([
-    { type: "box", id: Date.now(), position: [0, 0.5, 0], effect: "matte" },
+    { type: "box", id: Date.now(), position: [0, 0.5, 0], color: "#ff0000", effect: "matte" },
   ]);
 
   const handleAddObject = (type) => {
-    const position = [
-      (Math.random() - 0.5) * 4,
-      0.5,
-      (Math.random() - 0.5) * 4,
-    ];
-    setObjects([...objects, { type, id: Date.now(), position, effect: "matte" }]);
+    const position = [(Math.random() - 0.5) * 4, 0.5, (Math.random() - 0.5) * 4];
+
+    // reasonable defaults
+    let color = "#ff0000";
+    if (type === "cone") color = "#0000ff";
+    if (type === "sphere") color = "#00ff00";
+
+    setObjects((prev) => [
+      ...prev,
+      { type, id: Date.now(), position, color, effect: "matte" },
+    ]);
+  };
+
+  const handleColorChange = (id, newColor) => {
+    setObjects((prev) => prev.map((obj) => (obj.id === id ? { ...obj, color: newColor } : obj)));
   };
 
   const handleEffectChange = (id, newEffect) => {
-    setObjects(objects.map(obj => obj.id === id ? { ...obj, effect: newEffect } : obj));
+    setObjects((prev) => prev.map((obj) => (obj.id === id ? { ...obj, effect: newEffect } : obj)));
   };
 
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
-      <div style={{ position: "absolute", top: 20, left: 20, zIndex: 1 }}>
+      <div style={{ position: "absolute", top: 20, left: 20, zIndex: 1, display: "grid", gap: 12 }}>
         <ObjectSelector onObjectSelect={handleAddObject} />
+        <ColorPickerPanel objects={objects} onColorChange={handleColorChange} />
         <EffectSelector objects={objects} onEffectChange={handleEffectChange} />
       </div>
+
       <Canvas>
         <ambientLight intensity={2.5} />
         <directionalLight position={[1, 1, 1]} />
         {objects.map((obj) => (
-          <Shape key={obj.id} type={obj.type} position={obj.position} effect={obj.effect} />
+          <Shape
+            key={obj.id}
+            type={obj.type}
+            position={obj.position}
+            color={obj.color}
+            effect={obj.effect}
+          />
         ))}
         <Grid />
         <OrbitControls />
@@ -119,3 +143,4 @@ export default function Home() {
     </div>
   );
 }
+
