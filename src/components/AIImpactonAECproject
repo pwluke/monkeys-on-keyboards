@@ -1,0 +1,104 @@
+import React,{useEffect,useMemo,useRef,useState} from "react";
+
+// Minimal, single-file demo for localhost:3000 (Next.js/React compatible)
+// Shows how visitors become co-creators: movement (camera) + voice theme => evolving art overlay
+// Drop this file into your project (e.g., components/CoCreateMuseum.tsx) and import it on a page.
+
+// Theme can be 'spiral', 'habitat', or 'abstract'
+export function coCreate(img, theme){
+  // Simple "AI-like" interpreter: analyze brightness to produce positions for overlays.
+  const pts = [];
+  const d=img.data; const step=8; // sample grid for speed
+  for(let y=0;y<img.height;y+=step){
+    for(let x=0;x<img.width;x+=step){
+      const i=(y*img.width+x)*4; const l=0.2126*d[i]+0.7152*d[i+1]+0.0722*d[i+2];
+      if(l<80) pts.push({x,y,s:1}); // darker = block/koala candidate
+    }
+  }
+  // Shape post-processing by theme
+  if(theme==="spiral"){ // nudge points onto a spiral field
+    pts.forEach((p,idx)=>{const t=idx/40; p.x+=(Math.cos(t)*6); p.y+=(Math.sin(t)*6); p.s=1.2;});
+  } else if(theme==="habitat"){ // cluster points to leaf-like patches
+    pts.forEach((p,i)=>{const g=(i%7); p.x+=g-3; p.y+=3-g; p.s=1.4;});
+  } else { // abstract jitter
+    pts.forEach(p=>{p.x+=Math.random()*3-1.5; p.y+=Math.random()*3-1.5; p.s=0.9;});
+  }
+  return pts;
+}
+
+const EMOJI={spiral:"🌀", habitat:"🪴", abstract:"🐨"};
+
+export default function CoCreateMuseum(){
+  const videoRef=useRef(null); const canvasRef=useRef(null);
+  const [ready,setReady]=useState(false); const [theme,setTheme]=useState("spiral");
+  const [listening,setListening]=useState(false); const [zoom,setZoom]=useState(1);
+  const [prompt,setPrompt]=useState("Say 'spiral', 'habitat', or 'abstract'.");
+  const lastFrame=useRef(null);
+
+  useEffect(()=>{(async()=>{
+    try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
+      if(videoRef.current){videoRef.current.srcObject=s; await videoRef.current.play(); setReady(true);} }
+    catch(e){console.error(e);}
+  })();},[]);
+
+  // Voice commands via Web Speech API (non-essential fallback safe)
+  const startVoice=()=>{
+  const SR=window.webkitSpeechRecognition||window.SpeechRecognition; if(!SR){setPrompt("Voice not supported. Use buttons."); return;}
+    const r=new SR(); r.lang="en-US"; r.continuous=false; r.interimResults=false; setListening(true);
+  r.onresult=(ev)=>{const txt=ev.results[0][0].transcript.toLowerCase(); setPrompt("Heard: "+txt);
+      if(txt.includes("spiral")) setTheme("spiral"); else if(txt.includes("habitat")) setTheme("habitat"); else if(txt.includes("abstract")||txt.includes("koala")) setTheme("abstract");};
+    r.onend=()=>setListening(false); r.start();
+  };
+
+  // Render loop: draw video, compute difference, then overlay emojis at AI-selected points.
+  useEffect(()=>{
+    let raf=0; const loop=()=>{
+      const v=videoRef.current, c=canvasRef.current; if(!v||!c) return; const ctx=c.getContext("2d"); if(!ctx) return;
+      const w=c.width=v.videoWidth||640, h=c.height=v.videoHeight||360;
+      // Zoom: draw a scaled portion centered
+      const zx= w/(w/zoom), zy= h/(h/zoom); const sx=(w-zx)/2, sy=(h-zy)/2;
+      ctx.drawImage(v,sx,sy,zx,zy,0,0,w,h);
+      const frame=ctx.getImageData(0,0,w,h);
+      // Motion mask: emphasize changed pixels from last frame (visitors moving blocks)
+      if(lastFrame.current){ const a=frame.data, b=lastFrame.current.data; for(let i=0;i<a.length;i+=4){
+          const diff=Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2]);
+          const k=diff>50?1:0.2; a[i]*=k; a[i+1]*=k; a[i+2]*=k; }
+        ctx.putImageData(frame,0,0);
+      }
+      lastFrame.current=frame;
+      // "AI" interpreter → overlay field
+      const pts=coCreate(frame,theme);
+      ctx.font=`${12*zoom}px system-ui`; ctx.textAlign="center"; ctx.globalAlpha=0.9;
+      for(let i=0;i<pts.length;i+=30){ const p=pts[i]; ctx.save(); ctx.translate(p.x,p.y); ctx.scale(p.s,p.s); ctx.fillText(EMOJI[theme],0,0); ctx.restore(); }
+      ctx.globalAlpha=1; raf=requestAnimationFrame(loop);
+    }; raf=requestAnimationFrame(loop); return()=>cancelAnimationFrame(raf);
+  },[theme,zoom]);
+
+  return (
+    <div className="w-full h-full flex flex-col items-center gap-3 p-4">
+      <div className="flex items-center gap-2">
+        <button onClick={()=>setTheme("spiral")} className="px-3 py-1 rounded-2xl shadow">Spiral</button>
+        <button onClick={()=>setTheme("habitat")} className="px-3 py-1 rounded-2xl shadow">Habitat</button>
+        <button onClick={()=>setTheme("abstract")} className="px-3 py-1 rounded-2xl shadow">Abstract</button>
+        <button onClick={startVoice} className={`px-3 py-1 rounded-2xl shadow ${listening?"opacity-70":""}`}>{listening?"Listening…":"🎤 Voice"}</button>
+        <label className="ml-3">Zoom
+          <input type="range" min={1} max={2.5} step={0.01} value={zoom} onChange={e=>setZoom(parseFloat(e.target.value))} className="ml-2"/>
+        </label>
+      </div>
+      <p className="text-sm opacity-70 text-center max-w-2xl">{prompt} • Theme: <b>{theme}</b> • Move the tan blocks or your hands — motion + theme drives the overlay.</p>
+      <div className="relative rounded-2xl overflow-hidden shadow w-[min(90vw,900px)]">
+        <video ref={videoRef} playsInline muted className="w-full h-auto"/>
+        <canvas ref={canvasRef} className="absolute inset-0"/>
+      </div>
+      <details className="opacity-70 text-xs max-w-3xl">
+        <summary>How this shows co-creation</summary>
+        <ul className="list-disc ml-5 mt-2">
+          <li>Visitor movement (camera diff) emphasizes their actions in the frame.</li>
+          <li>Voice or button sets the creative theme that shapes the overlay field.</li>
+          <li>Overlay updates in real time → each audience changes the exhibit.</li>
+        </ul>
+      </details>
+      <footer className="text-xs opacity-60">Single-file demo. No keys needed. Import and render: <code>{`<CoCreateMuseum/>`}</code></footer>
+    </div>
+  );
+}
