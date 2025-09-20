@@ -54,3 +54,6 @@ const defaultMatrices = [
 
 // Atom to store the matrices
 export const matricesAtom = atom(defaultMatrices);
+
+// Atom to store the picked color from MaterialPicker
+export const pickedColorAtom = atom(null);

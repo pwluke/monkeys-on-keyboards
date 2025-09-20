@@ -18,6 +18,7 @@ import CubeInstances from "@/components/matrix";
 import MatrixInput from "@/components/MatrixInput";
 import MaterialPicker from "@/components/mv";
 
+
 export default function Home() {
   const [objects, setObjects] = useState([
     { 
@@ -66,6 +67,10 @@ export default function Home() {
 
   const handleColorChange = (id, newColor) => {
     setObjects((prev) => prev.map((obj) => (obj.id === id ? { ...obj, color: newColor } : obj)));
+  };
+
+  const handleApplyColorToAll = (color) => {
+    setObjects((prev) => prev.map((obj) => ({ ...obj, color })));
   };
 
   const handleEffectChange = (id, newEffect) => {
@@ -147,7 +152,7 @@ export default function Home() {
         />
         <ColorPickerPanel objects={objects} onColorChange={handleColorChange} />
         <EffectSelector objects={objects} onEffectChange={handleEffectChange} />
-        <MaterialPicker />
+        <MaterialPicker onApplyColorToAll={handleApplyColorToAll} />
         <MatrixInput />
         <TransformUI 
           selectedObject={selectedObject}

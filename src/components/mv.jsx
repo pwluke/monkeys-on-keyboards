@@ -2,13 +2,16 @@
 "use client"
 
 import React, { useState, useRef } from "react"
+import { useAtom } from "jotai"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Upload, X } from "lucide-react"
+import { Upload, X, Palette } from "lucide-react"
+import { pickedColorAtom } from "@/lib/atoms"
 
-export default function MaterialPicker() {
+export default function MaterialPicker({ onApplyColorToAll }) {
   const [image, setImage] = useState(null)
   const [pickedColor, setPickedColor] = useState(null)
+  const [globalPickedColor, setGlobalPickedColor] = useAtom(pickedColorAtom)
   const canvasRef = useRef(null)
 
   // Handle file upload
@@ -31,7 +34,16 @@ export default function MaterialPicker() {
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     const pixel = ctx.getImageData(x, y, 1, 1).data
-    setPickedColor(`rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`)
+    const color = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`
+    setPickedColor(color)
+    setGlobalPickedColor(color)
+  }
+
+  // Handle applying color to all shapes
+  const handleApplyToAll = () => {
+    if (pickedColor && onApplyColorToAll) {
+      onApplyColorToAll(pickedColor)
+    }
   }
 
   return (
@@ -50,15 +62,28 @@ export default function MaterialPicker() {
               size="icon"
               variant="destructive"
               className="absolute top-2 right-2"
-              onClick={() => { setImage(null); setPickedColor(null) }}
+              onClick={() => { 
+                setImage(null); 
+                setPickedColor(null);
+                setGlobalPickedColor(null);
+              }}
             >
               <X className="h-4 w-4" />
             </Button>
             {pickedColor && (
-              <div
-                className="mt-2 w-16 h-16 rounded border"
-                style={{ backgroundColor: pickedColor }}
-              >
+              <div className="mt-2 flex flex-col items-center gap-2">
+                <div
+                  className="w-16 h-16 rounded border"
+                  style={{ backgroundColor: pickedColor }}
+                />
+                <Button 
+                  onClick={handleApplyToAll}
+                  size="sm"
+                  className="flex items-center gap-2"
+                >
+                  <Palette className="h-4 w-4" />
+                  Apply to All Shapes
+                </Button>
               </div>
             )}
           </div>

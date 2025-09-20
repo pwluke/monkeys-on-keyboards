@@ -1,6 +1,10 @@
 import { useRef } from "react";
+import { useAtom } from "jotai";
+import { pickedColorAtom } from "@/lib/atoms";
 
 export default function Shape({ type, position, color, effect }) {
+    const [globalPickedColor] = useAtom(pickedColorAtom);
+    
     // Compute effect-driven material settings
     let materialProps = {};
     switch (effect) {
@@ -55,7 +59,8 @@ export default function Shape({ type, position, color, effect }) {
   
     // Default color per shape if none provided
     const defaultColorByType = { box: "red", cone: "blue", sphere: "green" };
-    const finalColor = color || defaultColorByType[type] || "white";
+    // Use global picked color if available, otherwise use the provided color, then default
+    const finalColor = globalPickedColor || color || defaultColorByType[type] || "white";
   
     switch (type) {
       case "box":
