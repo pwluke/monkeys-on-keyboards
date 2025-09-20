@@ -114,7 +114,8 @@ export default function ObjectSelectionPanel({
                   color: "#666",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px"
+                  gap: "4px",
+                  flexWrap: "wrap"
                 }}>
                   <div 
                     style={{ 
@@ -128,6 +129,11 @@ export default function ObjectSelectionPanel({
                   <span>
                     Pos: [{obj.position?.map(p => p.toFixed(1)).join(", ")}]
                   </span>
+                  {obj.latitude !== undefined && obj.longitude !== undefined && (
+                    <span style={{ color: "#007bff" }}>
+                      📍 {obj.latitude.toFixed(4)}, {obj.longitude.toFixed(4)}
+                    </span>
+                  )}
                 </div>
               </div>
               <div style={{ display: "flex", gap: "4px" }}>

@@ -10,6 +10,7 @@ import TransformUI from "@/components/TransformUI";
 import ObjectSelectionPanel from "@/components/ObjectSelectionPanel";
 import ViewportControls from "@/components/ViewportControls";
 import ViewportAnimator from "@/components/ViewportAnimator";
+import GeolocationPanel from "@/components/GeolocationPanel";
 
 import ArtPiece from "@/components/ArtPiece";
 import Shape from "@/components/shape";
@@ -19,7 +20,18 @@ import MaterialPicker from "@/components/mv";
 
 export default function Home() {
   const [objects, setObjects] = useState([
-    { type: "box", id: Date.now(), position: [0, 0.5, 0], color: "#ff0000", effect: "matte", rotation: [0, 0, 0], scale: [1, 1, 1] },
+    { 
+      type: "box", 
+      id: Date.now(), 
+      position: [0, 0.5, 0], 
+      color: "#ff0000", 
+      effect: "matte", 
+      rotation: [0, 0, 0], 
+      scale: [1, 1, 1],
+      latitude: 40.7128,
+      longitude: -74.0060,
+      altitude: 0
+    },
   ]);
   const [selectedId, setSelectedId] = useState(null);
   const [transformMode, setTransformMode] = useState("translate");
@@ -36,13 +48,16 @@ export default function Home() {
     if (type === "sphere") color = "#00ff00";
 
     const newObject = { 
-        type,
+      type, 
       id: Date.now(), 
       position, 
       color, 
       effect: "matte",
-        rotation: [0, 0, 0],
-      scale: [1, 1, 1]
+      rotation: [0, 0, 0],
+      scale: [1, 1, 1],
+      latitude: 40.7128,
+      longitude: -74.0060,
+      altitude: 0
     };
 
     setObjects((prev) => [...prev, newObject]);
@@ -55,6 +70,12 @@ export default function Home() {
 
   const handleEffectChange = (id, newEffect) => {
     setObjects((prev) => prev.map((obj) => (obj.id === id ? { ...obj, effect: newEffect } : obj)));
+  };
+
+  const handleLocationChange = (id, locationData) => {
+    setObjects((prev) => prev.map((obj) => 
+      obj.id === id ? { ...obj, ...locationData } : obj
+    ));
   };
 
   const handleSelectObject = (id) => {
@@ -140,6 +161,10 @@ export default function Home() {
           onViewChange={handleViewChange} 
           isAnimating={isAnimating}
         />
+        <GeolocationPanel 
+          selectedObject={selectedObject}
+          onLocationChange={handleLocationChange}
+        />
       </div>
 
       <Canvas onClick={handleCanvasClick}>
@@ -157,7 +182,7 @@ export default function Home() {
         />
         
         {/* Transform Controls System */}
-        <TransformControls
+      <TransformControls
           objects={objects}
           selectedId={selectedId}
           onSelect={handleSelectObject}
