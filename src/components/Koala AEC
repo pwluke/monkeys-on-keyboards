@@ -1,0 +1,397 @@
+import React, { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+const AECKoalaConstructionSite = () => {
+  const mountRef = useRef(null);
+  const [isRotating, setIsRotating] = useState(true);
+  const [rotationSpeed, setRotationSpeed] = useState(0.005);
+  const [koalaCount, setKoalaCount] = useState(100);
+  const [cameraAngle, setCameraAngle] = useState('perspective');
+  const [constructionPhase, setConstructionPhase] = useState('planning');
+  const [workingHours, setWorkingHours] = useState('day');
+  const [safetyMode, setSafetyMode] = useState(true);
+  const mouseRef = useRef({ x: 0, y: 0, isDown: false });
+
+  const phases = {
+    planning: { color: 0x4169E1, activity: 'blueprints' },
+    foundation: { color: 0x8B4513, activity: 'concrete' },
+    framing: { color: 0xFFD700, activity: 'building' },
+    systems: { color: 0x32CD32, activity: 'electrical' },
+    finishing: { color: 0xFF6347, activity: 'inspection' }
+  };
+
+  useEffect(() => {
+    if (!mountRef.current) return;
+    // ...existing 3D scene setup and animation code...
+  }, [isRotating, rotationSpeed, koalaCount, cameraAngle, constructionPhase, workingHours, safetyMode]);
+
+  return (
+    <div className="w-full max-w-4xl mx-auto p-4">
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-blue-600 bg-clip-text text-transparent">
+            AEC Fibonacci Koala Construction Site
+          </CardTitle>
+          <CardDescription>
+            Professional construction site with {koalaCount} koala workers in {constructionPhase} phase
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center space-y-4">
+          <div 
+            ref={mountRef}
+            className="border-2 border-orange-200 rounded-lg shadow-lg cursor-grab"
+            style={{ width: '800px', height: '600px' }}
+          />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full max-w-3xl">
+            <select value={koalaCount} onChange={(e) => setKoalaCount(parseInt(e.target.value))} className="px-2 py-1 border rounded text-sm">
+              <option value={25}>25 Workers</option>
+              <option value={50}>50 Workers</option>
+              <option value={100}>100 Workers</option>
+            </select>
+            <select value={cameraAngle} onChange={(e) => setCameraAngle(e.target.value)} className="px-2 py-1 border rounded text-sm">
+              <option value="perspective">Site View</option>
+              <option value="top">Top View</option>
+              <option value="side">Side View</option>
+              <option value="front">Front View</option>
+              <option value="isometric">Isometric</option>
+              <option value="closeup">Close-up</option>
+            </select>
+            <select value={constructionPhase} onChange={(e) => setConstructionPhase(e.target.value)} className="px-2 py-1 border rounded text-sm">
+              <option value="planning">Planning</option>
+              <option value="foundation">Foundation</option>
+              <option value="framing">Framing</option>
+              <option value="systems">Systems</option>
+              <option value="finishing">Finishing</option>
+            </select>
+            <select value={workingHours} onChange={(e) => setWorkingHours(e.target.value)} className="px-2 py-1 border rounded text-sm">
+              <option value="day">Day Shift</option>
+              <option value="night">Night Shift</option>
+            </select>
+            <button onClick={() => setIsRotating(!isRotating)} className="px-3 py-1 bg-orange-500 text-white rounded text-sm hover:bg-orange-600">
+              {isRotating ? 'Pause' : 'Resume'}
+            </button>
+            <button onClick={() => setSafetyMode(!safetyMode)} className="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">
+              Safety: {safetyMode ? 'ON' : 'OFF'}
+            </button>
+            <div className="flex items-center gap-1">
+              <label className="text-xs">Speed:</label>
+              <input type="range" min="0.001" max="0.02" step="0.001" value={rotationSpeed} onChange={(e) => setRotationSpeed(parseFloat(e.target.value))} className="w-16" />
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 text-center">
+            🏗️ Professional AEC Site • 👷 Koala Workers • 📐 BIM Integration • 🚁 Drone Surveys • ⚠️ Safety First!
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default AECKoalaConstructionSite;
+    mainLight.position.set(15, 20, 10);
+    mainLight.castShadow = true;
+    scene.add(mainLight);
+
+    if (workingHours === 'night') {
+      const spotlight = new THREE.SpotLight(0xFFFF00, 2, 50, Math.PI / 4);
+      spotlight.position.set(0, 25, 0);
+      scene.add(spotlight);
+    }
+
+    const createKoala = (role, index) => {
+      const group = new THREE.Group();
+      const phase = phases[constructionPhase];
+      
+      // Body
+      const bodyGeo = new THREE.SphereGeometry(0.12, 8, 6);
+      const bodyMat = new THREE.MeshLambertMaterial({ color: phase.color });
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      body.userData = { animSpeed: 0.02 + Math.random() * 0.01 };
+      group.add(body);
+
+      // Head
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 6), bodyMat);
+      head.position.y = 0.18;
+      group.add(head);
+
+      // Safety gear
+      if (safetyMode) {
+        const hardHat = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.09, 0.08, 0.03, 8),
+          new THREE.MeshLambertMaterial({ color: 0xFFFF00 })
+        );
+        hardHat.position.set(0, 0.26, 0);
+        group.add(hardHat);
+      }
+
+      // Role-specific equipment
+      if (role === 'architect') {
+        const blueprint = new THREE.Mesh(
+          new THREE.PlaneGeometry(0.15, 0.1),
+          new THREE.MeshBasicMaterial({ color: 0x0066CC, transparent: true, opacity: 0.8 })
+        );
+        blueprint.position.set(0.2, 0.15, 0);
+        blueprint.rotation.y = Math.PI / 4;
+        group.add(blueprint);
+      } else if (role === 'crane') {
+        const crane = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.01, 0.01, 0.5),
+          new THREE.MeshLambertMaterial({ color: 0xFF8C00 })
+        );
+        crane.position.set(0, 0.4, 0);
+        const hook = new THREE.Mesh(
+          new THREE.BoxGeometry(0.05, 0.05, 0.05),
+          new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+        );
+        hook.position.set(0, 0.1, 0.2);
+        group.add(crane, hook);
+      } else if (role === 'inspector') {
+        const clipboard = new THREE.Mesh(
+          new THREE.PlaneGeometry(0.08, 0.12),
+          new THREE.MeshBasicMaterial({ color: 0xFFFFFF })
+        );
+        clipboard.position.set(-0.15, 0.1, 0);
+        clipboard.rotation.y = -Math.PI / 6;
+        group.add(clipboard);
+      } else if (role === 'surveyor') {
+        const theodolite = new THREE.Mesh(
+          new THREE.ConeGeometry(0.03, 0.08, 6),
+          new THREE.MeshLambertMaterial({ color: 0x333333 })
+        );
+        theodolite.position.set(0, 0.3, 0);
+        group.add(theodolite);
+      }
+
+      // Progress indicator
+      const progressGeo = new THREE.RingGeometry(0.08, 0.1, 8);
+      const progressMat = new THREE.MeshBasicMaterial({ 
+        color: 0x00FF00, 
+        transparent: true, 
+        opacity: 0.6 
+      });
+      const progress = new THREE.Mesh(progressGeo, progressMat);
+      progress.position.set(0, 0.4, 0);
+      progress.rotation.x = -Math.PI / 2;
+      progress.userData = { completion: (index % 10) / 10 };
+      group.add(progress);
+
+      return group;
+    };
+
+    const siteGroup = new THREE.Group();
+    const koalas = [];
+    const roles = ['architect', 'crane', 'inspector', 'surveyor', 'worker'];
+
+    // Construction site base
+    const siteBase = new THREE.Mesh(
+      new THREE.CircleGeometry(8, 32),
+      new THREE.MeshLambertMaterial({ color: 0x8B7355 })
+    );
+    siteBase.rotation.x = -Math.PI / 2;
+    siteBase.position.y = -0.5;
+    siteGroup.add(siteBase);
+
+    // Fibonacci spiral construction layout
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+    
+    for (let i = 0; i < koalaCount; i++) {
+      const angle = i * goldenAngle;
+      const radius = Math.sqrt(i) * 0.4;
+      const height = Math.sin(i * 0.08) * 1.5;
+      
+      const role = roles[i % roles.length];
+      const koala = createKoala(role, i);
+      
+      koala.position.set(
+        Math.cos(angle) * radius,
+        height + 2,
+        Math.sin(angle) * radius
+      );
+      koala.rotation.y = angle + Math.PI / 2;
+      koala.userData = { 
+        role, 
+        originalY: height + 2,
+        workCycle: i * 0.1,
+        productivity: 0.5 + Math.random() * 0.5
+      };
+      
+      koalas.push(koala);
+      siteGroup.add(koala);
+    }
+
+    // BIM visualization lines
+    const bimGeometry = new THREE.BufferGeometry();
+    const bimPoints = [];
+    for (let i = 0; i < 50; i++) {
+      const angle = i * goldenAngle;
+      const radius = Math.sqrt(i) * 0.4;
+      bimPoints.push(new THREE.Vector3(
+        Math.cos(angle) * radius, 
+        Math.sin(i * 0.08) * 1.5 + 2, 
+        Math.sin(angle) * radius
+      ));
+    }
+    bimGeometry.setFromPoints(bimPoints);
+    const bimMaterial = new THREE.LineBasicMaterial({ 
+      color: phases[constructionPhase].color, 
+      transparent: true, 
+      opacity: 0.4 
+    });
+    const bimLines = new THREE.Line(bimGeometry, bimMaterial);
+    siteGroup.add(bimLines);
+
+    scene.add(siteGroup);
+
+    // Camera positioning
+    const setCameraPosition = () => {
+      switch(cameraAngle) {
+        case 'top': camera.position.set(0, 18, 0); camera.lookAt(0, 0, 0); break;
+        case 'side': camera.position.set(15, 5, 0); camera.lookAt(0, 5, 0); break;
+        case 'drone': camera.position.set(10, 12, 8); camera.lookAt(0, 2, 0); break;
+        default: camera.position.set(8, 8, 12); camera.lookAt(0, 3, 0);
+      }
+    };
+    setCameraPosition();
+
+    // Mouse controls
+    const handleMouseMove = (event) => {
+      if (mouseRef.current.isDown) {
+        const deltaX = event.clientX - mouseRef.current.x;
+        const deltaY = event.clientY - mouseRef.current.y;
+        siteGroup.rotation.y += deltaX * 0.01;
+        if (cameraAngle === 'perspective') {
+          camera.position.y += deltaY * 0.02;
+          camera.lookAt(0, 3, 0);
+        }
+      }
+      mouseRef.current.x = event.clientX;
+      mouseRef.current.y = event.clientY;
+    };
+
+    renderer.domElement.addEventListener('mousedown', () => mouseRef.current.isDown = true);
+    renderer.domElement.addEventListener('mouseup', () => mouseRef.current.isDown = false);
+    renderer.domElement.addEventListener('mousemove', handleMouseMove);
+
+    // Animation loop
+    let time = 0;
+    const animate = () => {
+      requestAnimationFrame(animate);
+      time += 0.016;
+
+      // Koala work animations
+      koalas.forEach((koala, i) => {
+        const body = koala.children[0];
+        const workIntensity = Math.sin(time * body.userData.animSpeed + koala.userData.workCycle);
+        
+        // Work bobbing
+        body.position.y = Math.sin(time * 2 + i * 0.2) * 0.05;
+        
+        // Role-specific animations
+        if (koala.userData.role === 'crane' && koala.children[6]) {
+          koala.children[6].position.y = 0.1 + Math.sin(time * 1.5 + i) * 0.1; // Hook movement
+        }
+        
+        if (koala.userData.role === 'architect' && koala.children[4]) {
+          koala.children[4].rotation.z = Math.sin(time + i) * 0.2; // Blueprint wave
+        }
+
+        // Progress updates
+        if (koala.children[koala.children.length - 1].userData.completion !== undefined) {
+          const progress = koala.children[koala.children.length - 1];
+          const completion = (Math.sin(time * 0.5 + i) + 1) / 2;
+          progress.scale.setScalar(completion * koala.userData.productivity);
+        }
+      });
+
+      // Site rotation and camera orbit
+      if (isRotating) {
+        siteGroup.rotation.y += rotationSpeed;
+        if (cameraAngle === 'drone') {
+          camera.position.x = Math.cos(time * 0.1) * 12;
+          camera.position.z = Math.sin(time * 0.1) * 12;
+          camera.lookAt(0, 2, 0);
+        }
+      }
+
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+    };
+  }, [isRotating, rotationSpeed, koalaCount, cameraAngle, constructionPhase, workingHours, safetyMode]);
+
+  return (
+    <div className="w-full max-w-4xl mx-auto p-4">
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-blue-600 bg-clip-text text-transparent">
+            AEC Fibonacci Koala Construction Site
+          </CardTitle>
+          <CardDescription>
+            Professional construction site with {koalaCount} koala workers in {constructionPhase} phase
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center space-y-4">
+          <div 
+            ref={mountRef} 
+            className="border-2 border-orange-200 rounded-lg shadow-lg cursor-grab"
+            style={{ width: '800px', height: '600px' }}
+          />
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full max-w-3xl">
+            <select value={koalaCount} onChange={(e) => setKoalaCount(parseInt(e.target.value))} className="px-2 py-1 border rounded text-sm">
+              <option value={25}>25 Workers</option>
+              <option value={50}>50 Workers</option>
+              <option value={100}>100 Workers</option>
+            </select>
+            
+            <select value={cameraAngle} onChange={(e) => setCameraAngle(e.target.value)} className="px-2 py-1 border rounded text-sm">
+              <option value="perspective">Site View</option>
+              <option value="top">Blueprint View</option>
+              <option value="side">Elevation</option>
+              <option value="drone">Drone Survey</option>
+            </select>
+            
+            <select value={constructionPhase} onChange={(e) => setConstructionPhase(e.target.value)} className="px-2 py-1 border rounded text-sm">
+              <option value="planning">Planning</option>
+              <option value="foundation">Foundation</option>
+              <option value="framing">Framing</option>
+              <option value="systems">Systems</option>
+              <option value="finishing">Finishing</option>
+            </select>
+            
+            <select value={workingHours} onChange={(e) => setWorkingHours(e.target.value)} className="px-2 py-1 border rounded text-sm">
+              <option value="day">Day Shift</option>
+              <option value="night">Night Shift</option>
+            </select>
+            
+            <button onClick={() => setIsRotating(!isRotating)} className="px-3 py-1 bg-orange-500 text-white rounded text-sm hover:bg-orange-600">
+              {isRotating ? 'Pause' : 'Resume'}
+            </button>
+            
+            <button onClick={() => setSafetyMode(!safetyMode)} className="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">
+              Safety: {safetyMode ? 'ON' : 'OFF'}
+            </button>
+            
+            <div className="flex items-center gap-1">
+              <label className="text-xs">Speed:</label>
+              <input type="range" min="0.001" max="0.02" step="0.001" value={rotationSpeed} onChange={(e) => setRotationSpeed(parseFloat(e.target.value))} className="w-16" />
+            </div>
+          </div>
+          
+          <p className="text-sm text-gray-600 text-center">
+            🏗️ Professional AEC Site • 👷 Koala Workers • 📐 BIM Integration • 🚁 Drone Surveys • ⚠️ Safety First!
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default AECKoalaConstructionSite;
