@@ -11,6 +11,8 @@ import ObjectSelectionPanel from "@/components/ObjectSelectionPanel";
 import ViewportControls from "@/components/ViewportControls";
 import ViewportAnimator from "@/components/ViewportAnimator";
 import GeolocationPanel from "@/components/GeolocationPanel";
+import BackgroundSwitcher from "@/components/background";
+import VideoIntro from "@/components/VideoIntro";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
@@ -113,6 +115,7 @@ export default function Home() {
   const [activeView, setActiveView] = useState("Perspective");
   const [viewPreset, setViewPreset] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showVideoIntro, setShowVideoIntro] = useState(true);
 
   // Toggle controls for scene elements
   // const [visibleElements, setVisibleElements] = useState({
@@ -252,6 +255,10 @@ export default function Home() {
     setIsAnimating(false);
   };
 
+  const handleVideoIntroComplete = () => {
+    setShowVideoIntro(false);
+  };
+
   const handleToggleElement = (element) => {
     switch (element) {
       case "cubeInstances":
@@ -285,7 +292,11 @@ export default function Home() {
   const selectedObject = objects.find(obj => obj.id === selectedId);
 
   return (
-    <div className="h-screen w-screen max-h-screen relative">
+    <BackgroundSwitcher>
+      {/* Video Intro */}
+      {showVideoIntro && <VideoIntro onComplete={handleVideoIntroComplete} />}
+      
+      <div className="h-screen w-screen max-h-screen relative">
       {/* Toggle Group at the top */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
         <div className="text-sm font-medium mb-2">Scene Elements</div>
@@ -325,7 +336,7 @@ export default function Home() {
         </ToggleGroup>
       </div>
 
-      <div className="absolute top-4 left-4 z-10 grid gap-2 max-h-screen overflow-y-auto w-80">
+      <div className="absolute top-24 left-4 z-10 grid gap-2 max-h-screen overflow-y-auto w-80">
         {/* Object Selector Panel */}
 
         <ViewSelector />
@@ -490,6 +501,7 @@ export default function Home() {
 
         <axesHelper args={[5]} />
         </Canvas>
-        </div>
+      </div>
+    </BackgroundSwitcher>
   );
 }
