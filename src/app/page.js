@@ -8,6 +8,8 @@ import ColorPickerPanel from "@/components/ui/ColorPickerPanel";
 
 import ArtPiece from "@/components/ArtPiece";
 import Shape from "@/components/shape";
+import CubeInstances from "@/components/matrix";
+import MatrixInput from "@/components/MatrixInput";
 
 export default function Home() {
   const [objects, setObjects] = useState([
@@ -42,6 +44,7 @@ export default function Home() {
         <ObjectSelector onObjectSelect={handleAddObject} />
         <ColorPickerPanel objects={objects} onColorChange={handleColorChange} />
         <EffectSelector objects={objects} onEffectChange={handleEffectChange} />
+        <MatrixInput />
       </div>
 
       <Canvas>
@@ -59,6 +62,7 @@ export default function Home() {
           />
         ))}
         <Grid />
+        <CubeInstances />
         <OrbitControls />
       </Canvas>
     </div>
