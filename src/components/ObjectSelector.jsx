@@ -24,6 +24,8 @@ export function ObjectSelector({ onObjectSelect }) {
           <SelectItem value="box">Box</SelectItem>
           <SelectItem value="cone">Cone</SelectItem>
           <SelectItem value="sphere">Sphere</SelectItem>
+          <SelectItem value="cylinder">Cylinder</SelectItem>
+          <SelectItem value="torus">Torus</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

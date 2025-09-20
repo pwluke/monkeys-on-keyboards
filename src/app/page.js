@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Grid, OrbitControls, Environment } from "@react-three/drei";
 import { ObjectSelector } from "@/components/ObjectSelector";
@@ -21,6 +21,66 @@ import MatrixInput from "@/components/MatrixInput";
 import MaterialPicker from "@/components/mv";
 import GuggenheimStructure from "@/components/BlueKoala";
 
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { ViewSelector } from "@/components/ViewSelector";
+import { useTheme } from "next-themes";
+
+
+function Shape({ type, position, view }) {
+  const isLineweight = view === "lineweight";
+  const isArctic = view === "arctic";
+
+  const materialProps = {
+    color: isArctic ? "white" : undefined,
+    transparent: view === "transparent" || isLineweight,
+    opacity: view === "transparent" ? 0.7 : isLineweight ? 0.1 : 1,
+  };
+
+  switch (type) {
+    case "box":
+      return (
+        <mesh position={position}>
+          <boxGeometry />
+          <meshStandardMaterial color="red" {...materialProps} />
+          {isLineweight && <Edges />}
+        </mesh>
+      );
+    case "cone":
+      return (
+        <mesh position={position}>
+          <coneGeometry />
+          <meshStandardMaterial color="blue" {...materialProps} />
+          {isLineweight && <Edges />}
+        </mesh>
+      );
+    case "sphere":
+      return (
+        <mesh position={position}>
+          <sphereGeometry />
+          <meshStandardMaterial color="green" {...materialProps} />
+          {isLineweight && <Edges />}
+        </mesh>
+      );    
+    case "cylinder":
+      return (
+        <mesh position={position}>
+          <cylinderGeometry />
+          <meshStandardMaterial color="yellow" {...materialProps} />
+          {isLineweight && <Edges />}
+        </mesh>
+      );
+    case "torus":
+      return (
+        <mesh position={position}>
+          <torusGeometry />
+          <meshStandardMaterial color="purple" {...materialProps} />
+          {isLineweight && <Edges />}
+        </mesh>
+      );
+    default:
+      return null;
+  }
+}
 
 export default function Home() {
   const [objects, setObjects] = useState([
@@ -69,6 +129,12 @@ export default function Home() {
     viewportControls: false,
     geolocation: false
   });
+  const [view, setView] = useState("default");
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => setMounted(true), []);
 
   const handleAddObject = (type) => {
     const position = [(Math.random() - 0.5) * 4, 0.5, (Math.random() - 0.5) * 4];
@@ -226,6 +292,9 @@ export default function Home() {
 
       <div className="absolute top-4 left-4 z-10 grid gap-2 max-h-screen overflow-y-auto w-80">
         {/* Object Selector Panel */}
+
+        <ViewSelector onViewChange={handleViewChange} currentView={view} />
+        <ThemeToggle theme={theme} />
         <Collapsible open={panelStates.objectSelector} onOpenChange={() => togglePanel('objectSelector')}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
             <span className="text-sm font-medium">Object Selector</span>
@@ -344,9 +413,12 @@ export default function Home() {
         </Collapsible>
       </div>
 
-      <Canvas onClick={handleCanvasClick}>
+      <Canvas 
+        shadows={view === "arctic"} 
+        camera={{ position: [-5, 5, 5], fov: 50 }}  
+        onClick={handleCanvasClick}>
         <Environment preset="studio" />
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={view === "arctic" ? 4 : 2.5} />
         <directionalLight position={[1, 1, 1]} />
         
         {/* Conditionally rendered scene elements */}
@@ -376,8 +448,10 @@ export default function Home() {
         
         <Grid />
         <OrbitControls enabled={!selectedId} />
+
+        <axesHelper args={[5]} />
         </Canvas>
-    </div>
+        </div>
   );
 }
 
