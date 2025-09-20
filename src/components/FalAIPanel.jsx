@@ -12,9 +12,9 @@ import { Loader2, Camera, Download, Settings } from 'lucide-react';
 
 export default function FalAIPanel({ canvasCaptureRef, onImageGenerated }) {
   const [apiKey, setApiKey] = useState(process.env.NEXT_PUBLIC_FAL_API_KEY || 'deaca35c-587b-44d8-a6bf-f06e116b50ea:734e95e21ca6a4192fb6ab026f11d0c2');
-  const [prompt, setPrompt] = useState('american house, northeast suburb, summer, exterior, early afternoon, classic style');
+  const [prompt, setPrompt] = useState('a abstract art piece that is also a jungle gym for children. fun, whisical, playful, sunny day');
   const [seed, setSeed] = useState(7482035931);
-  const [selectedModel, setSelectedModel] = useState('flux-pro-kontext');
+  const [selectedModel, setSelectedModel] = useState('flux-dev-img2img');
   const [strength, setStrength] = useState(0.8);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(null);
@@ -27,8 +27,8 @@ export default function FalAIPanel({ canvasCaptureRef, onImageGenerated }) {
     }
 
     try {
-      // Use the CanvasCapture component's method to get the screenshot
-      const dataURL = canvasCaptureRef.current.captureCanvas();
+      // Use the CanvasCapture component's method to get the screenshot (now async)
+      const dataURL = await canvasCaptureRef.current.captureCanvas();
       
       if (!dataURL) {
         console.error('Failed to capture canvas');
