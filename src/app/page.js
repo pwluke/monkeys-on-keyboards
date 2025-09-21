@@ -404,6 +404,23 @@ export default function Home() {
           </CollapsibleContent>
         </Collapsible>
 
+        {/* Transform UI Panel */}
+        <Collapsible open={panelStates.transformUI} onOpenChange={() => togglePanel('transformUI')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
+            <span className="text-sm font-medium">Transform UI</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.transformUI ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-1">
+            <TransformUI 
+              selectedObject={selectedObject}
+              transformMode={transformMode}
+              onModeChange={setTransformMode}
+              onDelete={handleDeleteObject}
+              onDuplicate={handleDuplicateObject}
+            />
+          </CollapsibleContent>
+        </Collapsible>
+
         {/* Color Picker Panel */}
         <Collapsible open={panelStates.colorPicker} onOpenChange={() => togglePanel('colorPicker')}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
@@ -448,22 +465,7 @@ export default function Home() {
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Transform UI Panel */}
-        <Collapsible open={panelStates.transformUI} onOpenChange={() => togglePanel('transformUI')}>
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
-            <span className="text-sm font-medium">Transform UI</span>
-            <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.transformUI ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-1">
-            <TransformUI 
-              selectedObject={selectedObject}
-              transformMode={transformMode}
-              onModeChange={setTransformMode}
-              onDelete={handleDeleteObject}
-              onDuplicate={handleDuplicateObject}
-            />
-          </CollapsibleContent>
-        </Collapsible>
+        
 
         {/* Viewport Controls Panel */}
         <Collapsible open={panelStates.viewportControls} onOpenChange={() => togglePanel('viewportControls')}>
