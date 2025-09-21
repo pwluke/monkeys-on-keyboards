@@ -10,6 +10,7 @@ export const showSnakeAtom = atom(false);
 export const showTreesAtom = atom(false);
 export const showLabelsAtom = atom(false);
 export const showFibonacciAtom = atom(false);
+export const showConstructionMonkeysAtom = atom(false);
 
 
 export const showVideoIntroAtom = atom(false);

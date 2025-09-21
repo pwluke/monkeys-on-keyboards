@@ -28,12 +28,13 @@ import CubeInstances from "@/components/matrix";
 import MatrixInput from "@/components/MatrixInput";
 import MaterialPicker from "@/components/mv";
 import GuggenheimStructure from "@/components/BlueKoala";
+import ConstructionMonkeys from "@/components/ConstructionMonkeys";
 
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ViewSelector } from "@/components/ViewSelector";
 import { useTheme } from "next-themes";
 import { useAtom } from "jotai";
-import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom, showSnakeAtom, showTreesAtom, showLabelsAtom, showFibonacciAtom } from "@/lib/atoms";
+import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom, showSnakeAtom, showTreesAtom, showLabelsAtom, showFibonacciAtom, showConstructionMonkeysAtom } from "@/lib/atoms";
 
 
 export default function Home() {
@@ -84,6 +85,7 @@ export default function Home() {
   const [showSnake, setShowSnake] = useAtom(showSnakeAtom);
   const [showTrees, setShowTrees] = useAtom(showTreesAtom);
   const [showLabels, setShowLabels] = useAtom(showLabelsAtom);
+  const [showConstructionMonkeys, setShowConstructionMonkeys] = useAtom(showConstructionMonkeysAtom);
 
   // Collapsible panel states
   const [panelStates, setPanelStates] = useState({
@@ -303,7 +305,8 @@ export default function Home() {
             ...(showSnake ? ['snake'] : []),
             ...(showTrees ? ['trees'] : []),
             ...(showLabels ? ['labels'] : []),
-            ...(showFibonacci ? ['fibonacci'] : [])
+            ...(showFibonacci ? ['fibonacci'] : []),
+            ...(showConstructionMonkeys ? ['constructionMonkeys'] : [])
           ]}
           onValueChange={(values) => {
             console.log('ToggleGroup values changed:', values);
@@ -315,6 +318,7 @@ export default function Home() {
             setShowTrees(values.includes('trees'));
             setShowLabels(values.includes('labels'));
             setShowFibonacci(values.includes('fibonacci'));
+            setShowConstructionMonkeys(values.includes('constructionMonkeys'));
           }}
         >
           <ToggleGroupItem
@@ -364,6 +368,12 @@ export default function Home() {
             className="px-3 py-2 text-xs"
           >
             Fibonacci
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="constructionMonkeys"
+            className="px-3 py-2 text-xs"
+          >
+            Construction
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
@@ -528,9 +538,8 @@ export default function Home() {
         {showCubeInstances && <CubeInstances />}
         {showTrees && <BasicTerrainMesh />}
         {/* {showLabels && <Labels />} */}
-        {showFibonacci && <FibonacciScene
-                
-              />}
+        {showFibonacci && <FibonacciScene />}
+        {showConstructionMonkeys && <ConstructionMonkeys />}
         
         {/* Viewport Animator */}
         <ViewportAnimator 
