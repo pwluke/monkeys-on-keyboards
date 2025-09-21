@@ -1,0 +1,1514 @@
+[
+  {
+    "type": "cylinder",
+    "id": 1758463743715,
+    "position": [
+      1.7623445826189958,
+      0.5,
+      13.001093802693095
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463742960,
+    "position": [
+      2.885867551531824,
+      0.5,
+      12.6728328031834
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743861,
+    "position": [
+      3.8529631648846348,
+      0.5,
+      12.013450349589476
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743487,
+    "position": [
+      4.568965365891115,
+      0.5,
+      11.087491390656803
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743342,
+    "position": [
+      4.963786870436067,
+      0.5,
+      9.985595240821144
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743210,
+    "position": [
+      4.01113634566784,
+      0.5,
+      6.725004590324684
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463742987,
+    "position": [
+      3.0851773867351637,
+      0.5,
+      6.009002389318203
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743135,
+    "position": [
+      1.983281236899508,
+      0.5,
+      5.614180884773248
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743307,
+    "position": [
+      0.8133091686686826,
+      0.5,
+      5.579187956437851
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743478,
+    "position": [
+      -0.31021380024414236,
+      0.5,
+      5.907448955947562
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743810,
+    "position": [
+      -1.2773094135969532,
+      0.49999999999999994,
+      6.566831409541482
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743270,
+    "position": [
+      -1.9933116146034373,
+      0.5,
+      7.492790368474152
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743609,
+    "position": [
+      -2.3881331191483888,
+      0.5,
+      8.594686518309814
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463742965,
+    "position": [
+      -2.4231260474837817,
+      0.5,
+      9.764658586540634
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743130,
+    "position": [
+      -2.0948650479740794,
+      0.5,
+      10.888181555453457
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743505,
+    "position": [
+      -1.4354825943801577,
+      0.5,
+      11.855277168806271
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743355,
+    "position": [
+      -0.5095236354474888,
+      0.5,
+      12.571279369812752
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743503,
+    "position": [
+      0.5923725143881737,
+      0.5,
+      12.966100874357707
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743758,
+    "position": [
+      -1.9521674089884102,
+      3.5,
+      6.637089105330158
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743478,
+    "position": [
+      1.1396676883492396,
+      3.5,
+      5.230124236075357
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743697,
+    "position": [
+      -2.1464369381632524,
+      3.5,
+      11.030803211745079
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463742901,
+    "position": [
+      3.9009917216254038,
+      3.5,
+      11.29819227939978
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743503,
+    "position": [
+      1.9722009074763514,
+      3.5,
+      12.573296840691544
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743459,
+    "position": [
+      3.3049637433532997,
+      4.5,
+      6.041061127058056
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743729,
+    "position": [
+      3.3049637433532997,
+      3.5,
+      6.041061127058056
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743508,
+    "position": [
+      -2.1464369381632524,
+      2.5,
+      11.030803211745079
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743608,
+    "position": [
+      -2.6312439920080912,
+      2.5,
+      9.96542944352282
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743902,
+    "position": [
+      -2.763104299971122,
+      2.5,
+      8.802385160334218
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743708,
+    "position": [
+      -2.529110456384136,
+      2.5,
+      7.655517240023784
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743100,
+    "position": [
+      -1.9521674089884102,
+      2.5,
+      6.637089105330158
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743026,
+    "position": [
+      -1.0887503630616184,
+      2.5,
+      5.8467915978832234
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743215,
+    "position": [
+      -0.02337659483936827,
+      2.5,
+      5.3619845440383855
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743762,
+    "position": [
+      1.1396676883492396,
+      2.5,
+      5.230124236075357
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743842,
+    "position": [
+      2.2865356086596726,
+      2.5,
+      5.464118079662334
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743121,
+    "position": [
+      3.3049637433532997,
+      2.5,
+      6.041061127058056
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743290,
+    "position": [
+      4.095261250800239,
+      2.5,
+      6.904478172984854
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743464,
+    "position": [
+      4.580068304645071,
+      2.5,
+      7.969851941207107
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743613,
+    "position": [
+      4.711928612608105,
+      2.5,
+      9.132896224395713
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463742956,
+    "position": [
+      4.4779347690211155,
+      2.5,
+      10.279764144706146
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743853,
+    "position": [
+      3.9009917216254038,
+      2.5,
+      11.29819227939978
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743033,
+    "position": [
+      3.037574675698605,
+      2.5,
+      12.088489786846711
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743360,
+    "position": [
+      1.9722009074763514,
+      2.5,
+      12.573296840691544
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743890,
+    "position": [
+      0.809156624287747,
+      2.5,
+      12.705157148654582
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743889,
+    "position": [
+      -0.3377112960226932,
+      2.5,
+      12.471163305067602
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743294,
+    "position": [
+      -1.3561394307163133,
+      2.5,
+      11.89422025767187
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743603,
+    "position": [
+      1.7623445826189958,
+      1.5,
+      13.001093802693095
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463743008,
+    "position": [
+      2.885867551531824,
+      1.5,
+      12.6728328031834
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743315,
+    "position": [
+      3.8529631648846348,
+      1.5,
+      12.013450349589476
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463742984,
+    "position": [
+      4.568965365891115,
+      1.5,
+      11.087491390656803
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743434,
+    "position": [
+      4.963786870436067,
+      1.5,
+      9.985595240821144
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463742979,
+    "position": [
+      4.01113634566784,
+      1.5,
+      6.725004590324684
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743470,
+    "position": [
+      3.0851773867351637,
+      1.5,
+      6.009002389318203
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743653,
+    "position": [
+      1.983281236899508,
+      1.5,
+      5.614180884773248
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743540,
+    "position": [
+      0.8133091686686826,
+      1.5,
+      5.579187956437851
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "box",
+    "id": 1758463743838,
+    "position": [
+      -0.31021380024414236,
+      1.5,
+      5.907448955947562
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743357,
+    "position": [
+      -1.2773094135969532,
+      1.5,
+      6.566831409541482
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743097,
+    "position": [
+      -1.9933116146034373,
+      1.5,
+      7.492790368474152
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743323,
+    "position": [
+      -2.3881331191483888,
+      1.5,
+      8.594686518309814
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463742964,
+    "position": [
+      -2.4231260474837817,
+      1.5,
+      9.764658586540634
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cone",
+    "id": 1758463742916,
+    "position": [
+      -2.0948650479740794,
+      1.5,
+      10.888181555453457
+    ],
+    "color": "#00ff00",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "cylinder",
+    "id": 1758463743797,
+    "position": [
+      -1.4354825943801577,
+      1.5,
+      11.855277168806271
+    ],
+    "color": "#0000ff",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743323,
+    "position": [
+      -0.5095236354474888,
+      1.5,
+      12.571279369812752
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  },
+  {
+    "type": "sphere",
+    "id": 1758463743849,
+    "position": [
+      0.5923725143881737,
+      1.5,
+      12.966100874357707
+    ],
+    "color": "#ff0000",
+    "effect": "matte",
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 0
+  }
+]
