@@ -17,7 +17,17 @@ Built with React Three Fiber and FAL AI, it's not just a dev tool — it's a **c
 - **Fibonacci Scene**: Mathematical art with golden spiral visualization and koala-shaped objects
 - **Art Piece Generator**: Click-to-create random shapes (cubes, cylinders, spheres) with random colors and rotations
 - **Blue Koala Structure**: Guggenheim-inspired architectural visualization
-- **Matrix Cube Instances**: Grid-based cube arrangements with customizable patterns
+- **Construction Monkeys**: AEC-focused construction site simulation with animated workers
+  - **Construction Phases**: Planning, Foundation, Framing, Systems, Finishing
+  - **Worker Management**: Configurable worker count (up to 100+ workers)
+  - **Time Controls**: Day/night working hours with dynamic lighting
+  - **Safety Features**: Safety vest toggle and construction site elements
+  - **Animation Controls**: Rotating spiral formations with breathing effects
+- **Matrix Cube Instances**: Advanced 4x4 transformation matrix system with preset loading
+  - **Matrix Input**: Paste custom 4x4 transformation matrices from CAD software
+  - **Preset Library**: Load predefined matrix arrangements (Cubes Tower, Sand Cluster, Sand Crab Sculpture)
+  - **CAD Integration**: Compatible with Rhino and other CAD software matrix exports
+  - **Real-time Updates**: Dynamic cube instance positioning based on matrix transformations
 - **Snake Game**: Interactive 3D snake game within the canvas
 - **Terrain System**: Satellite-textured terrain with procedural 3D trees
 - **Preset Scenes**: Load predefined scenes (Tall Tower, Castle, Circular Castle)
@@ -124,7 +134,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - Fibonacci mathematical art
   - Art piece generator
   - Guggenheim structure
-  - Matrix cube instances
+  - Construction monkeys with phase selection
+  - Matrix cube instances with preset loading
   - Snake game
   - Terrain with trees
 
@@ -150,6 +161,22 @@ Load predefined scenes to get started quickly:
 - **🐨 Circular Castle**: Koala-themed circular architecture
 
 ## 🌟 Advanced Features
+
+### Construction Workflow Management
+- **Phase-Based Construction**: Switch between construction phases (Planning, Foundation, Framing, Systems, Finishing)
+- **Worker Simulation**: Animated construction workers with safety equipment and breathing effects
+- **Site Conditions**: Toggle between day/night working hours with dynamic lighting
+- **Safety Compliance**: Enable/disable safety vests and construction site elements
+- **Scalable Workforce**: Configure worker count from small teams to large construction crews
+
+### CAD Integration & Matrix Systems
+- **Matrix Input Panel**: Import 4x4 transformation matrices from CAD software
+- **Preset Matrix Library**: 
+  - 🏗️ **Cubes Tower**: Architectural tower arrangements
+  - 🏖️ **Sand Cluster**: Organic clustering patterns
+  - 🦀 **Sand Crab Sculpture**: Complex sculptural formations
+- **Real-time Matrix Updates**: Live cube instance positioning based on transformation data
+- **CAD Software Compatibility**: Direct integration with Rhino and other professional CAD tools
 
 ### Material System
 - Multiple material effects (matte, metallic, glass)
