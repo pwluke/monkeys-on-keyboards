@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function MatrixInput() {
   const [matrices, setMatrices] = useAtom(matricesAtom);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
+  const [selectedPreset, setSelectedPreset] = useState('');
 
   const parseMatricesInput = (input) => {
     try {
@@ -85,6 +87,25 @@ export default function MatrixInput() {
     setError('');
   };
 
+  const handlePresetLoad = async () => {
+    if (!selectedPreset) return;
+    
+    try {
+      const response = await fetch(`/${selectedPreset}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load preset: ${response.statusText}`);
+      }
+      const text = await response.text();
+      const parsedMatrices = parseMatricesInput(text);
+      setMatrices(parsedMatrices);
+      setError('');
+      setSelectedPreset('');
+    } catch (e) {
+      console.error("Error loading preset matrices:", e);
+      setError(`Failed to load preset: ${e.message}`);
+    }
+  };
+
   const exampleInput = `[
   [
     [1, 0, 0, 0],
@@ -109,6 +130,32 @@ export default function MatrixInput() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Preset Matrix Selector */}
+        <div>
+          <label className="text-sm font-medium mb-2 block">
+            Load Matrix Preset:
+          </label>
+          <div className="flex gap-2">
+            <Select value={selectedPreset} onValueChange={setSelectedPreset}>
+              <SelectTrigger className="flex-1">
+                <SelectValue placeholder="Select a matrix preset..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="cubes_tower2.txt">🏗️ Cubes Tower</SelectItem>
+                <SelectItem value="sand_cluster.txt">🏖️ Sand Cluster</SelectItem>
+                <SelectItem value="sand_Crab_sculpture.txt">🦀 Sand Crab Sculpture</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button 
+              onClick={handlePresetLoad} 
+              disabled={!selectedPreset}
+              variant="outline"
+            >
+              Load
+            </Button>
+          </div>
+        </div>
+
         <div>
           <Textarea
             value={inputValue}
