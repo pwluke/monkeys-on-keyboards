@@ -289,7 +289,7 @@ export default function Home() {
       
       <div className="h-screen w-screen max-h-screen relative">
       {/* Toggle Group at the top */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+      <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
         <div className="text-sm font-medium mb-2">Scene Elements</div>
         <ToggleGroup 
           type="multiple" 
@@ -363,7 +363,7 @@ export default function Home() {
         {/* Object Selector Panel */}
 
         <ViewSelector />
-        <ThemeToggle theme={theme} />
+        {/* <ThemeToggle theme={theme} /> */}
         <SceneControls
           objects={objects}
           onSceneLoad={handleSceneLoad}
@@ -472,7 +472,7 @@ export default function Home() {
         </Collapsible>
 
         {/* Geolocation Panel */}
-        <Collapsible open={panelStates.geolocation} onOpenChange={() => togglePanel('geolocation')}>
+        {/* <Collapsible open={panelStates.geolocation} onOpenChange={() => togglePanel('geolocation')}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
             <span className="text-sm font-medium">Geolocation</span>
             <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.geolocation ? 'rotate-180' : ''}`} />
@@ -483,12 +483,12 @@ export default function Home() {
               onLocationChange={handleLocationChange}
             />
           </CollapsibleContent>
-        </Collapsible>
+        </Collapsible> */}
 
         {/* FAL AI Panel */}
         <Collapsible open={panelStates.falAI} onOpenChange={() => togglePanel('falAI')}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
-            <span className="text-sm font-medium">FAL AI Generation</span>
+            <span className="text-sm font-medium">AI Image Generation</span>
             <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.falAI ? 'rotate-180' : ''}`} />
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-1">

@@ -188,7 +188,7 @@ export default function FalAIPanel({ canvasCaptureRef, onImageGenerated }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Camera className="h-5 w-5" />
-          FAL AI Image Generation
+          AI Image Generation
         </CardTitle>
         <CardDescription>
           Capture your 3D scene and transform it with FLUX AI models. Get your API key from <a href="https://fal.ai" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">fal.ai</a>
