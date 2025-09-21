@@ -1,8 +1,9 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function SceneControls({ objects, onSceneLoad }) {
   const fileInputRef = useRef(null);
+  const [selectedPreset, setSelectedPreset] = useState("");
 
   const handleSaveScene = () => {
     const sceneData = JSON.stringify(objects, null, 2);
@@ -44,6 +45,26 @@ export default function SceneControls({ objects, onSceneLoad }) {
     fileInputRef.current?.click();
   };
 
+  const handlePresetLoad = async () => {
+    if (!selectedPreset) return;
+    
+    try {
+      const response = await fetch(`/${selectedPreset}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load preset: ${response.statusText}`);
+      }
+      const sceneData = await response.json();
+      if (Array.isArray(sceneData)) {
+        onSceneLoad(sceneData);
+      } else {
+        alert("Invalid preset scene format.");
+      }
+    } catch (error) {
+      console.error("Error loading preset scene:", error);
+      alert("Failed to load preset scene.");
+    }
+  };
+
   return (
     <div style={{ 
       padding: "12px", 
@@ -55,6 +76,49 @@ export default function SceneControls({ objects, onSceneLoad }) {
       <h3 style={{ margin: "0 0 12px 0", fontSize: "14px" }}>
         Scene Controls
       </h3>
+      
+      {/* Preset Scene Selector */}
+      <div style={{ marginBottom: "8px" }}>
+        <label style={{ fontSize: "11px", fontWeight: "500", color: "#666", display: "block", marginBottom: "4px" }}>
+          Load Preset Scene:
+        </label>
+        <div style={{ display: "flex", gap: "4px" }}>
+          <select 
+            value={selectedPreset} 
+            onChange={(e) => setSelectedPreset(e.target.value)}
+            style={{ 
+              flex: 1, 
+              padding: "4px 6px", 
+              fontSize: "11px", 
+              border: "1px solid #ddd", 
+              borderRadius: "4px",
+              background: "white"
+            }}
+          >
+            <option value="">Select a preset...</option>
+            <option value="tall_tower_scene.json">🏗️ Tall Tower</option>
+            <option value="castle_scene_v3.json">🏰 Castle</option>
+            <option value="circular_Castle_shapes.json">🐨 Circular Castle</option>
+          </select>
+          <button 
+            onClick={handlePresetLoad} 
+            disabled={!selectedPreset}
+            style={{ 
+              padding: "4px 8px", 
+              background: selectedPreset ? "#6f42c1" : "#ccc", 
+              color: "white", 
+              border: "none", 
+              borderRadius: "4px", 
+              cursor: selectedPreset ? "pointer" : "not-allowed", 
+              fontSize: "11px", 
+              fontWeight: "500" 
+            }}
+          >
+            Load
+          </button>
+        </div>
+      </div>
+
       <div style={{ display: "flex", gap: "6px" }}>
         <button onClick={handleSaveScene} style={{ flex: 1, padding: "6px 8px", background: "#17a2b8", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontSize: "11px", fontWeight: "500" }}>
           💾 Save Scene
