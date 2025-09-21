@@ -6,27 +6,86 @@ import { useImperativeHandle, forwardRef } from 'react';
 const CanvasCapture = forwardRef((props, ref) => {
   const { gl } = useThree();
 
-  const getBackgroundInfo = () => {
-    // Find the BackgroundSwitcher div by looking for the div that wraps the canvas
-    const canvasElement = gl.domElement;
-    let backgroundDiv = canvasElement.parentElement;
+  // Helper function to extract background color from CSS background property
+  const extractBackgroundColor = (backgroundString) => {
+    if (!backgroundString) return null;
     
-    // Traverse up to find the div with background styling
-    while (backgroundDiv && backgroundDiv !== document.body) {
-      const computedStyle = window.getComputedStyle(backgroundDiv);
-      if (computedStyle.background !== 'rgba(0, 0, 0, 0)' && 
-          computedStyle.background !== 'transparent' && 
-          computedStyle.background !== 'initial') {
-        return {
-          element: backgroundDiv,
-          background: computedStyle.background,
-          backgroundImage: computedStyle.backgroundImage,
-          backgroundColor: computedStyle.backgroundColor
-        };
+    // Look for hex colors
+    const hexMatch = backgroundString.match(/#[0-9a-fA-F]{6,8}/);
+    if (hexMatch) return hexMatch[0];
+    
+    // Look for rgb/rgba colors
+    const rgbMatch = backgroundString.match(/rgba?\([^)]+\)/);
+    if (rgbMatch) return rgbMatch[0];
+    
+    // Look for named colors (basic check)
+    const colorNames = ['white', 'black', 'red', 'green', 'blue', 'yellow', 'gray', 'grey'];
+    for (const color of colorNames) {
+      if (backgroundString.toLowerCase().includes(color)) {
+        return color;
       }
-      backgroundDiv = backgroundDiv.parentElement;
     }
     
+    return null;
+  };
+
+  const getBackgroundInfo = () => {
+    // Find the BackgroundSwitcher div - it should be the outermost container
+    // with minHeight: 100vh and width: 100vw
+    const canvasElement = gl.domElement;
+    let currentElement = canvasElement;
+    
+    console.log('Starting background search from canvas element:', canvasElement);
+    
+    // Traverse up the DOM tree to find the BackgroundSwitcher container
+    while (currentElement && currentElement !== document.body) {
+      const computedStyle = window.getComputedStyle(currentElement);
+      const inlineStyle = currentElement.style;
+      
+      console.log('Checking element:', currentElement.tagName, currentElement.className, {
+        computedBackground: computedStyle.background,
+        computedBackgroundImage: computedStyle.backgroundImage,
+        computedBackgroundColor: computedStyle.backgroundColor,
+        inlineBackground: inlineStyle.background,
+        inlineBackgroundImage: inlineStyle.backgroundImage,
+        inlineBackgroundColor: inlineStyle.backgroundColor,
+        minHeight: inlineStyle.minHeight || computedStyle.minHeight,
+        width: inlineStyle.width || computedStyle.width
+      });
+      
+      // Check if this is the BackgroundSwitcher container
+      // It should have minHeight: 100vh and width: 100vw
+      const isBackgroundSwitcher = (
+        (inlineStyle.minHeight === '100vh' && inlineStyle.width === '100vw') ||
+        (computedStyle.minHeight === '100vh' && computedStyle.width === '100vw')
+      );
+      
+      // Check if it has background styling
+      const hasInlineBackground = inlineStyle.background && inlineStyle.background !== '';
+      const hasComputedBackground = (
+        computedStyle.background && 
+        computedStyle.background !== 'rgba(0, 0, 0, 0)' && 
+        computedStyle.background !== 'transparent' && 
+        computedStyle.background !== 'initial'
+      );
+      
+      if (isBackgroundSwitcher && (hasInlineBackground || hasComputedBackground)) {
+        console.log('Found BackgroundSwitcher element:', currentElement);
+        return {
+          element: currentElement,
+          background: computedStyle.background,
+          backgroundImage: computedStyle.backgroundImage,
+          backgroundColor: computedStyle.backgroundColor,
+          inlineBackground: inlineStyle.background,
+          inlineBackgroundImage: inlineStyle.backgroundImage,
+          inlineBackgroundColor: inlineStyle.backgroundColor
+        };
+      }
+      
+      currentElement = currentElement.parentElement;
+    }
+    
+    console.log('No BackgroundSwitcher element found');
     return null;
   };
 
@@ -43,42 +102,108 @@ const CanvasCapture = forwardRef((props, ref) => {
       // Create image for the 3D scene
       const sceneImg = new Image();
       sceneImg.onload = () => {
+        console.log('Scene image loaded, processing background...');
+        
         // First, draw the background
         if (backgroundInfo) {
-          if (backgroundInfo.backgroundImage && backgroundInfo.backgroundImage !== 'none') {
-            // Extract URL from backgroundImage CSS property
-            const urlMatch = backgroundInfo.backgroundImage.match(/url\(['"]?([^'")]+)['"]?\)/);
+          console.log('Background info available:', backgroundInfo);
+          
+          // Try to parse the inline background style first (BackgroundSwitcher uses inline styles)
+          const inlineBackground = backgroundInfo.inlineBackground;
+          const computedBackground = backgroundInfo.background;
+          console.log('Processing backgrounds:', { inlineBackground, computedBackground });
+          
+          // Check for background image in inline style first
+          let backgroundImageUrl = null;
+          if (inlineBackground && inlineBackground.includes('url(')) {
+            const urlMatch = inlineBackground.match(/url\(['"]?([^'")]+)['"]?\)/);
             if (urlMatch) {
-              const bgImg = new Image();
-              bgImg.crossOrigin = 'anonymous';
-              bgImg.onload = () => {
-                // Draw background image to cover the canvas
-                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-                // Then draw the 3D scene on top
-                ctx.drawImage(sceneImg, 0, 0);
-                resolve(canvas.toDataURL('image/png'));
-              };
-              bgImg.onerror = () => {
-                // Fallback to background color if image fails
-                if (backgroundInfo.backgroundColor && backgroundInfo.backgroundColor !== 'rgba(0, 0, 0, 0)') {
-                  ctx.fillStyle = backgroundInfo.backgroundColor;
-                  ctx.fillRect(0, 0, canvas.width, canvas.height);
-                }
-                ctx.drawImage(sceneImg, 0, 0);
-                resolve(canvas.toDataURL('image/png'));
-              };
-              bgImg.src = urlMatch[1];
-              return;
+              backgroundImageUrl = urlMatch[1];
+              console.log('Found inline background image URL:', backgroundImageUrl);
             }
           }
           
-          // Fallback to background color
-          if (backgroundInfo.backgroundColor && backgroundInfo.backgroundColor !== 'rgba(0, 0, 0, 0)') {
-            ctx.fillStyle = backgroundInfo.backgroundColor;
+          // Also check inline backgroundImage property
+          if (!backgroundImageUrl && backgroundInfo.inlineBackgroundImage && backgroundInfo.inlineBackgroundImage !== 'none') {
+            const urlMatch = backgroundInfo.inlineBackgroundImage.match(/url\(['"]?([^'")]+)['"]?\)/);
+            if (urlMatch) {
+              backgroundImageUrl = urlMatch[1];
+              console.log('Found inline backgroundImage URL:', backgroundImageUrl);
+            }
+          }
+          
+          // Also check computed backgroundImage as fallback
+          if (!backgroundImageUrl && backgroundInfo.backgroundImage && backgroundInfo.backgroundImage !== 'none') {
+            const urlMatch = backgroundInfo.backgroundImage.match(/url\(['"]?([^'")]+)['"]?\)/);
+            if (urlMatch) {
+              backgroundImageUrl = urlMatch[1];
+              console.log('Found computed background image URL:', backgroundImageUrl);
+            }
+          }
+          
+          if (backgroundImageUrl) {
+            console.log('Loading background image:', backgroundImageUrl);
+            const bgImg = new Image();
+            bgImg.crossOrigin = 'anonymous';
+            bgImg.onload = () => {
+              console.log('Background image loaded successfully');
+              // Draw background image to cover the canvas
+              ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+              // Then draw the 3D scene on top
+              ctx.drawImage(sceneImg, 0, 0);
+              resolve(canvas.toDataURL('image/png'));
+            };
+            bgImg.onerror = (error) => {
+              console.error('Background image failed to load:', error);
+              // Fallback to background color if image fails
+              const backgroundColor = extractBackgroundColor(inlineBackground) || backgroundInfo.backgroundColor;
+              if (backgroundColor && backgroundColor !== 'rgba(0, 0, 0, 0)' && backgroundColor !== 'transparent') {
+                console.log('Using fallback background color:', backgroundColor);
+                ctx.fillStyle = backgroundColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+              }
+              ctx.drawImage(sceneImg, 0, 0);
+              resolve(canvas.toDataURL('image/png'));
+            };
+            bgImg.src = backgroundImageUrl;
+            return;
+          }
+          
+          // No background image, try background color
+          let backgroundColor = null;
+          
+          // Try inline background color first
+          if (backgroundInfo.inlineBackgroundColor && backgroundInfo.inlineBackgroundColor !== '') {
+            backgroundColor = backgroundInfo.inlineBackgroundColor;
+            console.log('Found inline background color:', backgroundColor);
+          }
+          
+          // Try extracting color from inline background string
+          if (!backgroundColor) {
+            backgroundColor = extractBackgroundColor(inlineBackground);
+            if (backgroundColor) {
+              console.log('Extracted color from inline background:', backgroundColor);
+            }
+          }
+          
+          // Fallback to computed background color
+          if (!backgroundColor && backgroundInfo.backgroundColor && 
+              backgroundInfo.backgroundColor !== 'rgba(0, 0, 0, 0)' && 
+              backgroundInfo.backgroundColor !== 'transparent') {
+            backgroundColor = backgroundInfo.backgroundColor;
+            console.log('Using computed background color:', backgroundColor);
+          }
+          
+          if (backgroundColor && backgroundColor !== 'rgba(0, 0, 0, 0)' && backgroundColor !== 'transparent') {
+            console.log('Applying background color:', backgroundColor);
+            ctx.fillStyle = backgroundColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+          } else {
+            console.log('No valid background color found');
           }
         }
         
+        console.log('Drawing 3D scene on top');
         // Draw the 3D scene
         ctx.drawImage(sceneImg, 0, 0);
         resolve(canvas.toDataURL('image/png'));
