@@ -1,14 +1,15 @@
 import { atom } from 'jotai';
 
-export  const showGuggenheimAtom = atom(true);
-export const showCubeInstancesAtom = atom(true);
-export const showArtPieceAtom = atom(true);
+export  const showGuggenheimAtom = atom(false);
+export const showCubeInstancesAtom = atom(false);
+export const showArtPieceAtom = atom(false);
 export const showTransformControlsAtom = atom(true);
 export const showViewportControlsAtom = atom(true);
-export const showGeolocationAtom = atom(true);
+export const showGeolocationAtom = atom(false);
 export const showSnakeAtom = atom(false);
 export const showTreesAtom = atom(false);
 export const showLabelsAtom = atom(false);
+export const showFibonacciAtom = atom(false);
 
 
 export const showVideoIntroAtom = atom(false);

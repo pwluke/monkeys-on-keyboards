@@ -22,7 +22,7 @@ import { ChevronDown } from "lucide-react";
 import SceneControls from "@/components/SceneControls";
 import Snake from "@/components/snake";
 import BasicTerrainMesh from "@/components/BasicTerrainTile";
-
+import FibonacciScene from "@/components/FibonacciScene";
 import ArtPiece from "@/components/ArtPiece";
 import CubeInstances from "@/components/matrix";
 import MatrixInput from "@/components/MatrixInput";
@@ -33,7 +33,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ViewSelector } from "@/components/ViewSelector";
 import { useTheme } from "next-themes";
 import { useAtom } from "jotai";
-import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom, showSnakeAtom, showTreesAtom, showLabelsAtom } from "@/lib/atoms";
+import { currentViewAtom, isArcticAtom, isTransparentAtom, isLineweightAtom, showGuggenheimAtom, showCubeInstancesAtom, showArtPieceAtom, showTransformControlsAtom, showViewportControlsAtom, showGeolocationAtom, showSnakeAtom, showTreesAtom, showLabelsAtom, showFibonacciAtom } from "@/lib/atoms";
 
 
 export default function Home() {
@@ -66,6 +66,7 @@ export default function Home() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showVideoIntro, setShowVideoIntro] = useState(true);
   const [overlayImageUrl, setOverlayImageUrl] = useState(null);
+  const [showFibonacci, setShowFibonacci] = useAtom(showFibonacciAtom);
 
   // Toggle controls for scene elements
   // const [visibleElements, setVisibleElements] = useState({
@@ -301,7 +302,8 @@ export default function Home() {
             ...(showTransformControls ? ['transformControls'] : []),
             ...(showSnake ? ['snake'] : []),
             ...(showTrees ? ['trees'] : []),
-            ...(showLabels ? ['labels'] : [])
+            ...(showLabels ? ['labels'] : []),
+            ...(showFibonacci ? ['fibonacci'] : [])
           ]}
           onValueChange={(values) => {
             console.log('ToggleGroup values changed:', values);
@@ -312,6 +314,7 @@ export default function Home() {
             setShowSnake(values.includes('snake'));
             setShowTrees(values.includes('trees'));
             setShowLabels(values.includes('labels'));
+            setShowFibonacci(values.includes('fibonacci'));
           }}
         >
           <ToggleGroupItem
@@ -356,6 +359,12 @@ export default function Home() {
           >
             Labels
           </ToggleGroupItem>
+          <ToggleGroupItem
+            value="fibonacci"
+            className="px-3 py-2 text-xs"
+          >
+            Fibonacci
+          </ToggleGroupItem>
         </ToggleGroup>
       </div>
 
@@ -370,7 +379,7 @@ export default function Home() {
         />
         <Collapsible open={panelStates.objectSelector} onOpenChange={() => togglePanel('objectSelector')}>
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white/95 transition-colors">
-            <span className="text-sm font-medium">Object Selector</span>
+            <span className="text-sm font-medium">Add Objects</span>
             <ChevronDown className={`h-4 w-4 transition-transform ${panelStates.objectSelector ? 'rotate-180' : ''}`} />
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-1">
@@ -517,6 +526,9 @@ export default function Home() {
         {showCubeInstances && <CubeInstances />}
         {showTrees && <BasicTerrainMesh />}
         {/* {showLabels && <Labels />} */}
+        {showFibonacci && <FibonacciScene
+                
+              />}
         
         {/* Viewport Animator */}
         <ViewportAnimator 
